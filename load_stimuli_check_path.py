@@ -55,8 +55,8 @@ def load_and_randomize(stim_path):
         quit()
 
     # Separate practice data and coordinates data
-    practice = stimuli[:3]
-    coordinates = stimuli[3:]
+    practice = stimuli[:6]
+    coordinates = stimuli[6:]
 
     randomized = False
 

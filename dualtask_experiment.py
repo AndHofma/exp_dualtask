@@ -23,6 +23,10 @@ from instructions import *
 check_config_paths(stim_path, output_path, pics_path, record_path)
 # Loading and randomizing the stimulus types
 stimulus_Type = load_and_randomize(stim_path)
+
+# For debugging
+# print(f"List randomized stimuli: {stimulus_Type[1]}")
+
 # Get participant information
 participant_info = get_participant_info()
 # Creating the display window
