@@ -29,7 +29,7 @@ To open it, follow these steps:
 * Replace your_desired_folder with the path to the folder:
   * `cd your_desired_folder` (e.g. `cd "C:\Users\Andrea_Hofmann\OneDrive\PhD\exp_dualtask"`)
 * Clone the GitHub repository by running the following command:
-  * `git clone https://github.com/AndHofma/dual_task.git`
+  * `git clone https://github.com/AndHofma/exp_dualtask.git`
   * The project files will be downloaded to a folder named after the repository within the specified folder.
 
 ## 4. Checking Python Installation and Version
