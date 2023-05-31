@@ -15,8 +15,6 @@ import os
 import datetime
 
 
-prefs.hardware['audioLib'] = ['PTB', 'sounddevice', 'pyo', 'pygame']
-
 # Setup paths
 # stimulus directory
 stim_path = 'stimuli/'
