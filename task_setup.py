@@ -15,6 +15,7 @@ from scipy.io.wavfile import write
 import random
 from configuration import append_result_to_csv
 import os
+from psychopy.hardware import keyboard
 
 
 # single task procedure
@@ -116,6 +117,8 @@ def execute_singleTask(window, results, subj_path_rec, stimuli, task_name, werKo
             'answer_Calc': 'NA',
             'answer_Subject_Input': 'NA',
             'answer_Accuracy': 'NA',
+            'nback_correct_responses': 'NA',
+            'nback_false_responses': 'NA',
             'start_time': start_time_str,
             'end_time': end_time_str,
             'duration': duration_str,
@@ -125,9 +128,9 @@ def execute_singleTask(window, results, subj_path_rec, stimuli, task_name, werKo
 
 
 # dual task procedure
-def execute_dualTask(window, results, filename, subj_path_rec, stimuli, task_name, werKommt, fixation, randNumber, item,
-                     pic, prompt, feedback, input_text, keyList, fs, rec_seconds, movementDirections, responseList,
-                     dots, operations, arrows, pics_path, participant_info):
+def execute_dualTask_arrow_calc(window, results, filename, subj_path_rec, stimuli, task_name, werKommt, fixation, randNumber, item,
+                                pic, prompt, feedback, input_text, keyList, fs, rec_seconds, movementDirections, responseList,
+                                dots, operations, arrows, pics_path, participant_info):
     """
     Executes a dual task procedure in a psychophysical experiment.
 
@@ -360,6 +363,8 @@ def execute_dualTask(window, results, filename, subj_path_rec, stimuli, task_nam
             'answer_Calc': answer,
             'answer_Subject_Input': partic_Input,
             'answer_Accuracy': calc_Accuracy,
+            'nback_correct_responses': 'NA',
+            'nback_false_responses': 'NA',
             'start_time': start_time_str,
             'end_time': end_time_str,
             'duration': duration_str,
@@ -368,8 +373,131 @@ def execute_dualTask(window, results, filename, subj_path_rec, stimuli, task_nam
         append_result_to_csv(results[-1], filename, participant_info)
 
 
+def execute_dualTask_2_back(window, results, filename, subj_path_rec, stimuli, task_name, werKommt, fixation, item, pic,
+                            prompt, feedback, fs, rec_seconds, pics_path, participant_info, shapes_list):
+    """
+
+    """
+
+    # Initialize the keyboard
+    kb = keyboard.Keyboard()
+
+    # Initialize start time and start_time_str
+    start_time = time.time()
+    start_time_str = datetime.datetime.fromtimestamp(start_time).strftime('%H:%M:%S')
+
+    # Iterate over stimuli
+    for x in range(len(stimuli)):
+        task = task_name
+
+        n_frames_per_shape = 50  # want to show 6 different shapes within 300 frames
+        n_shapes = 300 // n_frames_per_shape
+
+        # Initialize a list for the shapes for the 2-back task
+        shape_stimuli = [random.choice(shapes_list) for _ in range(n_shapes)]
+        response_history = [False] * n_shapes  # initialize response history
+        correct_responses = [shape_stimuli[i] == shape_stimuli[i-2] for i in range(n_shapes)]  # correct answers
+
+        # naming the TextStim to find it in the log-file
+        werKommt.name = 'werKommt'
+        werKommt.draw()
+        window.flip()
+        core.wait(1.0)
+        window.flip()
+
+        # naming the ShapeStim to find it in the log-file
+        fixation.name = 'fixation'
+        fixation.draw()
+        window.flip()
+        core.wait(1.0)
+        window.flip()
+
+        stimulus = stimuli.loc[x]['item']
+        item.setText(stimulus)
+        # naming the TextStim to find it in the log-file
+        item.name = 'item_' + str(stimuli.loc[x]['ID'])
+
+        pictogram = stimuli.loc[x]['pic']
+        pic.image = pics_path + pictogram + '_small_borderless.png'
+        # naming the ImageStim to find it in the log-file
+        pic.name = str(pic.image)
+
+        # start recording the participant response - reading out loud the stimulus
+        responseRecord = sd.rec(int(rec_seconds * fs), samplerate=fs, channels=1)
+
+        # draw item and pic for 300 frames - and the moving dots btw 40-70 up to 190-220 frames
+        for frame in range(300):
+            item.draw()
+            pic.draw()
+            if frame % n_frames_per_shape == 0:  # Change the shape every n_frames_per_shape frames
+                current_shape = shape_stimuli[frame // n_frames_per_shape]
+                current_shape.draw()
+                # Record responses
+                kb.clock.reset()  # reset the clock
+                keys = kb.getKeys(['space'], waitRelease=True)
+                response_history[frame] = len(keys) > 0
+            window.flip()
+        sd.stop()  # stop the recording
+
+        # calculate the number of correct and false responses
+        num_correct = sum(a == b for a, b in zip(response_history[2:], correct_responses[2:]))
+        num_false = sum(response_history[2:]) - num_correct
+        num_matches = sum(response_history[2:])
+
+        # safe stimulus recording as wav file
+        write(os.path.join(subj_path_rec, 'dual_task_' + participant_info['subject'] + '_' + task_name + '_' + str(stimuli.loc[x]['ID']) + '.wav'), fs, responseRecord)
+        # naming the recording wav file to find it in the log-file
+        responseRecordName = 'dual_task_' + participant_info['subject'] + '_' + task_name + '_' + str(stimuli.loc[x]['ID']) + '.wav'
+
+        # show first response screen
+        feedback.setText('Sie haben' + num_correct + 'von' + num_matches + 'möglichen Matches richtig erkannt!')
+        prompt.pos = (0, 0.3)
+        prompt.size = 0.15
+        prompt.draw()
+        window.flip()
+
+        # Record end time and duration
+        end_time = time.time()
+        end_time_str = datetime.datetime.fromtimestamp(end_time).strftime('%H:%M:%S')
+        duration = end_time - start_time
+        hours, remainder = divmod(duration, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        duration_str = '{:02d}:{:02d}:{:02d}'.format(int(hours), int(minutes), int(seconds))
+
+        # Prepare the result dictionary
+        results.append({
+            'task': task,
+            'trial': str(x+1),
+            'phase': 'practice' if task_name == 'practice_dualTask' else 'test',
+            'stimulus_ID': stimuli.loc[x]['ID'],
+            'stimulus': stimuli.loc[x]['item'],
+            'rand_Nr': 'NA',
+            'stimulus_Rec': responseRecordName,
+            'dot_Move_Dir': 'NA',
+            'dot_1st_Frame': 'NA',
+            'dot_Last_Frame': 'NA',
+            'dot_Response_Key': 'NA',
+            'dot_Response_Accuracy': 'NA',
+            'rand_Nr_Calc': 'NA',
+            'rand_Operation': 'NA',
+            'answer_Calc': 'NA',
+            'answer_Subject_Input': 'NA',
+            'answer_Accuracy': 'NA',
+            'nback_correct_responses': num_correct,
+            'nback_false_responses': num_false,
+            'start_time': start_time_str,
+            'end_time': end_time_str,
+            'duration': duration_str,
+        })
+        # Append the result to the CSV file
+        append_result_to_csv(results[-1], filename, participant_info)
+
+
+
 # Display instructions consecutively
-def execute_task(window, task_name, participant_info, stimuli, werKommt, fixation, randNumber, item, pic, prompt, feedback, input_text, keyList, fs, rec_seconds, movementDirections, responseList, dots, operations, arrows, pics_path, dual_task=False):
+def execute_task(window, task_name, participant_info, stimuli, werKommt, fixation, randNumber, item, pic, prompt,
+                 feedback, input_text, keyList, fs, rec_seconds, movementDirections, responseList, dots, operations,
+                 arrows, pics_path, shapes_list, dual_task=False):
     """
     Orchestrates the execution of the tasks, whether they are dual or single. It prepares the paths for results and
     recordings of each participant, then calls the appropriate function to execute the task. It also displays an
@@ -426,10 +554,14 @@ def execute_task(window, task_name, participant_info, stimuli, werKommt, fixatio
 
     # Execute the task and save the result
     if dual_task:
-        execute_dualTask(window, results, filename, subj_path_rec, stimuli, task_name, werKommt, fixation, randNumber, item, pic, prompt,
-                         feedback, input_text, keyList, fs, rec_seconds, movementDirections, responseList, dots,
-                         operations, arrows, pics_path, participant_info)
+        execute_dualTask_arrow_calc(window, results, filename, subj_path_rec, stimuli, task_name, werKommt, fixation,
+                                    randNumber, item, pic, prompt, feedback, input_text, keyList, fs, rec_seconds,
+                                    movementDirections, responseList, dots, operations, arrows, pics_path, participant_info)
         if task_name == 'practice_dualTask':
+            display_text_and_wait(instructPracticeDualTaskEnd, window)
+        execute_dualTask_2_back(window, results, filename, subj_path_rec, stimuli, task_name, werKommt, fixation, item,
+                                pic, prompt, feedback, fs, rec_seconds, pics_path, participant_info, shapes_list)
+        if task_name == 'practice_dualTask_2back':
             display_text_and_wait(instructPracticeDualTaskEnd, window)
     else:
         execute_singleTask(window, results, subj_path_rec, stimuli, task_name, werKommt, fixation, item, pic, rec_seconds, fs,

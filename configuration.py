@@ -9,7 +9,7 @@ And the append_result_to_csv function is used to save the participant's trial re
 """
 
 # Import necessary libraries
-from psychopy import prefs, monitors, visual, gui, core
+from psychopy import monitors, visual, gui, core
 import csv
 import os
 import datetime
@@ -24,7 +24,11 @@ output_path = 'results/'
 pics_path = 'pics/'
 # directory for all recordings
 record_path = 'recordings/'
+# directory to shapes images for dual-task version
+shapes_path = 'shapes/'
 
+# Get a list of all file paths in the shapes directory
+shapes_list = [os.path.join(shapes_path, f) for f in os.listdir(shapes_path)]
 
 def create_window():
     """
@@ -112,7 +116,7 @@ def initialize_stimuli(window):
     # default parameters for the recordings
     fs = 44100  # Sample rate
     # Calculate the recording duration in seconds
-    visual_frames = 350
+    visual_frames = 300
     # automatically estimate monitor's refresh rate from window object
     estimated_frame_rate = window.getActualFrameRate()
     # If for some reason the function fails to get the actual frame rate, it will return None.
@@ -214,7 +218,9 @@ def append_result_to_csv(result, filename, participant_info):
     if not os.path.isfile(filename):
         with open(filename, 'w') as file:
             file.write(
-                'experiment,subject_ID,date,task,trial,phase,stimulus_ID,stimulus,rand_Nr,stimulus_Rec,dot_Move_Dir,dot_1st_Frame,dot_Last_Frame,dot_Response_Key,dot_Response_Accuracy,rand_Nr_Calc,rand_Operation,answer_Calc,answer_Subject_Input,answer_Accuracy,start_time,end_time,duration \n'
+                'experiment,subject_ID,date,task,trial,phase,stimulus_ID,stimulus,rand_nr,stimulus_rec,dot_move_dir,'
+                'dot_1st_frame,dot_last_lrame,dot_response_key,dot_response_accuracy,rand_nr_calc,rand_operation,'
+                'answer_calc,answer_subject_input,answer_accuracy,2-back_accuracy,2-back_errors,start_time,end_time,duration \n'
             )
 
     # Now append the result data
@@ -241,6 +247,8 @@ def append_result_to_csv(result, filename, participant_info):
             result['answer_Calc'],
             result['answer_Subject_Input'],
             result['answer_Accuracy'],
+            result['nback_correct_responses'],
+            result['nback_false_responses'],
             result['start_time'],
             result['end_time'],
             result['duration']

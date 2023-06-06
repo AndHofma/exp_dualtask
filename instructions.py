@@ -49,7 +49,7 @@ Sie sehen 60 verschiedene Namenssequenzen. \n
 Drücken Sie eine Taste, um mit dem Experiment zu starten.
 """
 
-# Create instruction text stimuli for the dual task
+# Create instruction text stimuli for the dual task with dot motion and calculations
 # instructions for end of single task and intro to dual task
 instructDualTask1 = """
 Erster Teil - geschafft! \n
@@ -71,7 +71,6 @@ Und bitte lösen Sie die beiden Aufgaben so akkurat wie möglich. \n
 Drücken Sie eine Taste, um zur nächsten Seite zu gelangen.
 """
 
-# Create instruction text stimuli for the practice trials of the single task
 # reminder instruction dual task and intro practice trials
 instructPracticeDualTaskStart = """
 Nochmal zur Erinnerung:
@@ -85,6 +84,27 @@ Drücken Sie eine Taste, um mit den Übungsbeispielen zu beginnen.
 
 # end practice trials dual task - begin test dual task
 instructPracticeDualTaskEnd = """
+Das waren die Übungsbeispiele. \n
+Falls Sie noch Fragen haben, geben Sie bitte der Versuchsleiterin Bescheid.
+Dieser Teil dauert ca. 12 Minuten - Sie sehen wieder 60 verschiedene Namenssequenzen.
+Drücken Sie eine Taste, um mit dem Experiment zu starten.
+"""
+
+# Create instruction text stimuli for the dual task with 2-back task
+# instructions for end of dual task with dot motion and calculations and intro to dual task 2-back task
+instructDualTask_2back1 = """
+Zweiter Teil - geschafft! \n
+Im dritten Teil gibt es wieder ein paar zusätzliche Aufgaben. 
+Während Sie weiterhin die Namenssequenz vorlesen, erscheint eine Reihe von Symbolen. 
+Merken Sie sich die Reihenfolge dieser Symbole. 
+Drücken Sie die Leertaste immer dann, wenn das dargestellte Symbol dasselbe ist, 
+wie das vorletzte Symbol (Symbol zwei Schritte zuvor). 
+\n
+Drücken Sie eine Taste, um mit den Übungsbeispielen zu beginnen.
+"""
+
+# end practice trials dual task - begin test dual task
+instructPracticeDualTask_2backEnd = """
 Das waren die Übungsbeispiele. \n
 Falls Sie noch Fragen haben, geben Sie bitte der Versuchsleiterin Bescheid.
 Dieser Teil dauert ca. 12 Minuten - Sie sehen wieder 60 verschiedene Namenssequenzen.

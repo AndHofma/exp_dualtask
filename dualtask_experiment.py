@@ -14,13 +14,13 @@ Detailed inline comments have been added to help understand the flow and functio
 
 # Import necessary PsychoPy libraries
 from load_stimuli_check_path import check_config_paths, load_and_randomize
-from configuration import get_participant_info, initialize_stimuli, create_window, stim_path, output_path, pics_path, record_path
+from configuration import get_participant_info, initialize_stimuli, create_window, stim_path, output_path, pics_path, record_path, shapes_path, shapes_list
 from task_setup import execute_task, display_and_wait, display_text_and_wait
 from psychopy import core
 from instructions import *
 
 # Checking validity of paths for stimuli and output
-check_config_paths(stim_path, output_path, pics_path, record_path)
+check_config_paths(stim_path, output_path, pics_path, record_path, shapes_path)
 # Loading and randomizing the stimulus types
 stimulus_Type = load_and_randomize(stim_path)
 
@@ -34,6 +34,7 @@ window = create_window()
 # Initializing all stimuli
 werKommt, fixation, randNumber, item, pic, prompt, feedback, input_text, keyList, fs, rec_seconds, movementDirections, responseList, dots, operations, arrows = initialize_stimuli(window)
 
+"""
 # Starting the experiment by displaying the instruction for the single task
 display_text_and_wait(instructSingleTask1, window)
 if display_text_and_wait(instructSingleTask2, window):
@@ -61,6 +62,7 @@ execute_task(window=window,
              dots=dots,
              operations=operations,
              arrows=arrows,
+             shapes_list=shapes_list,
              pics_path=pics_path
              )
 
@@ -86,6 +88,7 @@ execute_task(window=window,
              dots=dots,
              operations=operations,
              arrows=arrows,
+             shapes_list=shapes_list,
              pics_path=pics_path
              )
 
@@ -117,6 +120,7 @@ execute_task(window=window,
              operations=operations,
              arrows=arrows,
              pics_path=pics_path,
+             shapes_list=shapes_list,             
              dual_task=True
              )
 
@@ -143,8 +147,76 @@ execute_task(window=window,
              operations=operations,
              arrows=arrows,
              pics_path=pics_path,
+             shapes_list=shapes_list,
              dual_task=True  # or True if you want to execute a dual task
              )
+"""
+
+
+# Displaying the instruction for the dual task
+display_text_and_wait(instructDualTask_2back1, window)
+display_text_and_wait(instructPracticeDualTask_2backEnd, window)
+
+# Running the dual task practice session
+# execute_task(stimulus_Type[0], 'practice_dualTask', dual_task=True)  # practice items = stimulus_Type[0]
+execute_task(window=window,
+             task_name='practice_dualTask_2back',
+             participant_info=participant_info,
+             stimuli=stimulus_Type[0],
+             werKommt=werKommt,
+             fixation=fixation,
+             randNumber=randNumber,
+             item=item,
+             pic=pic,
+             prompt=prompt,
+             feedback=feedback,
+             input_text=input_text,
+             keyList=keyList,
+             fs=fs,
+             rec_seconds=rec_seconds,
+             movementDirections=movementDirections,
+             responseList=responseList,
+             dots=dots,
+             operations=operations,
+             arrows=arrows,
+             pics_path=pics_path,
+             shapes_list=shapes_list,
+             dual_task=True
+             )
+
+# Running the dual task test session
+# execute_task(stimulus_Type[1], 'test_dualTask', dual_task=True)  # randomized coordinates = stimulus_Type[1]
+execute_task(window=window,
+             task_name='test_dualTask_2back',
+             participant_info=participant_info,
+             stimuli=stimulus_Type[1],
+             werKommt=werKommt,
+             fixation=fixation,
+             randNumber=randNumber,
+             item=item,
+             pic=pic,
+             prompt=prompt,
+             feedback=feedback,
+             input_text=input_text,
+             keyList=keyList,
+             fs=fs,
+             rec_seconds=rec_seconds,
+             movementDirections=movementDirections,
+             responseList=responseList,
+             dots=dots,
+             operations=operations,
+             arrows=arrows,
+             pics_path=pics_path,
+             shapes_list=shapes_list,
+             dual_task=True  # or True if you want to execute a dual task
+             )
+
+# Show last prompt to end experiment with keypress
+prompt.setText('Geschafft! \n Vielen Dank! \n Drücken Sie eine Taste, um das Experiment zu beenden.')
+display_and_wait(prompt, window)
+window.close()
+core.quit()
+
 
 # Show last prompt to end experiment with keypress
 prompt.setText('Geschafft! \n Vielen Dank! \n Drücken Sie eine Taste, um das Experiment zu beenden.')
