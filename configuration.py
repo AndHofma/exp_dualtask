@@ -27,9 +27,8 @@ record_path = 'recordings/'
 # directory to shapes images for dual-task version
 shapes_path = 'shapes/'
 
-# Get a list of all file paths in the shapes directory
-shapes_list = [os.path.join(shapes_path, f) for f in os.listdir(shapes_path)]
 
+# to use in acoustic lab - second monitor name fixed here
 def create_window():
     """
     Create and initialize the experiment window.
@@ -53,23 +52,22 @@ def create_window():
 
 
 # to use for testing on laptop
-# def create_window():
-#    """
-#    Create and initialize the experiment window.
-#
-#    Returns:
-#    win : A PsychoPy visual.Window object for the experiment.
-#    """
-#    # Create a monitor object
-#    currentMonitor = monitors.Monitor(name='testMonitor')
-#
-#    # Create and return a window for the experiment
-#    return visual.Window(monitors.Monitor.getSizePix(currentMonitor),
-#                         monitor="testMonitor",
-#                         allowGUI=True,
-#                         fullscr=True,
-#                         color=(255, 255, 255)
-#                         )
+#def create_window():
+#   """
+#   Create and initialize the experiment window.
+#   Returns:
+#   win : A PsychoPy visual.Window object for the experiment.
+#   """
+   # Create a monitor object
+#   currentMonitor = monitors.Monitor(name='testMonitor')
+
+   # Create and return a window for the experiment
+#   return visual.Window(monitors.Monitor.getSizePix(currentMonitor),
+#                        monitor="testMonitor",
+#                        allowGUI=True,
+#                        fullscr=True,
+#                        color=(255, 255, 255)
+#                        )
 
 
 def initialize_stimuli(window):
@@ -193,7 +191,57 @@ def initialize_stimuli(window):
     # operations[0]=addition, operations[1]=subtraction
     operations = [lambda x, y: x + y, lambda x, y: x - y]  # Define operations for dual task
 
-    return werKommt, fixation, randNumber, item, pic, prompt, feedback, input_text, keyList, fs, rec_seconds, movementDirections, responseList, dots, operations, arrows
+    # Get a list of all file paths in the shapes directory
+    shapes_list = [os.path.join(shapes_path, f) for f in os.listdir(shapes_path)]
+
+    # Initialize shape stimulus
+    shape = visual.ImageStim(window,
+                             pos=(0, -0.5),
+                             name='shape')  # don't assign an image yet
+
+    # flanker stimuli
+    flanker_stimuli = [
+        ("XXXXX", 'a', 'congruent'),  # Congruent condition
+        ("XXCXX", 'a', 'congruent'),  # Congruent condition
+        ("XXVXX", 'l', 'incongruent'),  # Incongruent condition
+        ("XXBXX", 'l', 'incongruent'),  # Incongruent condition
+        ("CCXCC", 'a', 'congruent'),  # Congruent condition
+        ("CCCCC", 'a', 'congruent'),  # Congruent condition
+        ("CCVCC", 'l', 'incongruent'),  # Incongruent condition
+        ("CCBCC", 'l', 'incongruent'),  # Incongruent condition
+        ("VVXVV", 'a', 'incongruent'),  # Incongruent condition
+        ("VVCVV", 'a', 'incongruent'),  # Incongruent condition
+        ("VVVVV", 'l', 'congruent'),  # Congruent condition
+        ("VVBVV", 'l', 'congruent'),  # Congruent condition
+        ("BBXBB", 'a', 'incongruent'),  # Incongruent condition
+        ("BBCBB", 'a', 'incongruent'),  # Incongruent condition
+        ("BBVBB", 'l', 'congruent'),  # Congruent condition
+        ("BBBBB", 'l', 'congruent'),  # Congruent condition
+    ]
+    # flanker stimuli key mapping
+    key_mapping = {
+        "a": ["X", "C"],
+        "l": ["V", "B"]
+    }
+
+    # flanker shape stimuli
+    flanker_shape_stimuli = [
+        (">>>>>", 'l', 'congruent'),  # Congruent condition
+        ("<<<<<", 'a', 'congruent'),  # Congruent condition
+        ("++>++", 'l', 'neutral'),  # Neutral condition
+        ("++<++", 'a', 'neutral'),  # Neutral condition
+        ("<<><<", 'l', 'incongruent'),  # Incongruent condition
+        (">><>>", 'a', 'incongruent'),  # Incongruent condition
+    ]
+
+    # feedback flanker stimuli
+    flanker_correct = visual.ImageStim(window, image='pics/fixgreen.png', pos=(0, -0.5))
+    flanker_incorrect = visual.ImageStim(window, image='pics/fixred.png', pos=(0, -0.5))
+    flanker_neutral = visual.ImageStim(window, image='pics/fix.png', pos=(0, -0.5))
+
+    return werKommt, fixation, randNumber, item, pic, prompt, feedback, input_text, keyList, fs, rec_seconds, \
+        movementDirections, responseList, dots, operations, arrows, shapes_list, shape, \
+        flanker_stimuli, flanker_correct, flanker_incorrect, flanker_neutral, flanker_shape_stimuli
 
 
 def get_participant_info():
@@ -224,55 +272,259 @@ def get_participant_info():
 
 
 # Function to append a single result to the CSV file
-def append_result_to_csv(result, filename, participant_info):
+def append_result_to_csv(result, base_filename, participant_info, type='main'):
     """
-    Append a participant's trial result to a CSV file. If the file doesn't exist, it creates the file and adds headers.
+    Append a participant's trial result to a CSV file.
+    The CSV files correspond to the different dual-task versions (2back, flanker, flanker_shape) and the main CSV file with general parameters throughout all experiment parts.
+    The main CSV file includes the single task parameter values as well as the dot-motion and calculation task parameters, which is the first dual-task option hereafter.
+    If the file doesn't exist, it creates the file and adds headers.
 
     Args:
     result : dict. Contains the data for a single trial.
     filename : str. The filename of the CSV file.
     participant_info : dict. Contains the participant's information.
+    type : str. Can be 'main' for the main trial results, 'flanker' for flanker task results, and '2back' for 2-back task results.
 
     Returns:
-    None. The function directly writes to the CSV file.
+        None. The function directly writes to the CSV file.
+
+    Raises:
+        OSError: If there is an issue with accessing or writing to the CSV file.
+
+    Notes:
+        - The CSV file will be named "{base_filename}_{type}.csv".
+        - The function appends the result data to the CSV file.
+        - If the CSV file does not exist, it creates the file and adds the appropriate headers.
+
     """
+
+    # Define the filename by appending the type of the task to the base filename
+    filename = f"{base_filename}_{type}.csv"
 
     # Check if the file does not exist to write the header
     if not os.path.isfile(filename):
         with open(filename, 'w') as file:
-            file.write(
-                'experiment,subject_ID,date,task,trial,phase,stimulus_ID,stimulus,rand_nr,stimulus_rec,dot_move_dir,'
-                'dot_1st_frame,dot_last_lrame,dot_response_key,dot_response_accuracy,rand_nr_calc,rand_operation,'
-                'answer_calc,answer_subject_input,answer_accuracy,2-back_accuracy,2-back_errors,start_time,end_time,duration \n'
-            )
+            if type == 'main':
+                file.write(
+                'experiment,'
+                'subject_ID,'
+                'date,'
+                'task,'
+                'main_trial,'
+                'phase,'
+                'stimulus_id,'
+                'stimulus,'
+                'stimulus_rec,'
+                'rand_nr,'
+                'dot_direction,'
+                'dot_1st_frame,'
+                'dot_last_frame,'
+                'dot_response_key,'
+                'dot_response_accuracy,'
+                'rand_nr_calc,'
+                'rand_operation,'
+                'answer_calc,'
+                'answer_input,'
+                'answer_input_accuracy,'
+                '2back_matching_trials_single,'
+                '2back_matching_trials_dual,'
+                '2back_trial_accuracy_single,'
+                '2back_trial_accuracy_dual,'
+                '2back_trial_rt_correct_single,'
+                '2back_trial_rt_correct_dual,'
+                '2back_shape_order,'
+                'flanker_nr_trials_single,'
+                'flanker_nr_trials_dual,'
+                'flanker_trial_accuracy_single,'
+                'flanker_trial_accuracy_dual,'
+                'flanker_trial_rt_correct_single,'
+                'flanker_trial_rt_correct_dual,'
+                'flanker_trial_rt_incorrect_single,'
+                'flanker_trial_rt_incorrect_dual,'
+                'flanker_shape_nr_trials_single,'
+                'flanker_shape_nr_trials_dual,'
+                'flanker_shape_trial_accuracy_single,'
+                'flanker_shape_trial_accuracy_dual,'
+                'flanker_shape_trial_rt_correct_single,'
+                'flanker_shape_trial_rt_correct_dual,'
+                'flanker_shape_trial_rt_incorrect_single,'
+                'flanker_shape_trial_rt_incorrect_dual,'
+                'start_time,'
+                'end_time,'
+                'duration \n'
+                )
+            elif type == '2back':
+                file.write(
+                    'experiment,'
+                    'subject_id,'
+                    'date,'
+                    'task,'
+                    'phase,'
+                    'main_trial,'
+                    '2back_trial,'
+                    '2back_trial_type,'
+                    '2back_accuracy,'
+                    '2back_response_type,'
+                    '2back_rt,'
+                    '2back_current_shape,'
+                    '2back_nback1_shape,'
+                    '2back_nback2_shape,'
+                    'presentation,'
+                    'start_time,'
+                    'end_time,'
+                    'duration \n'
+                )
+            elif type == 'flanker':
+                file.write(
+                    'experiment,'
+                    'subject_id,'
+                    'date,'
+                    'task,'
+                    'phase,'
+                    'main_trial,'
+                    'flanker_trial,'
+                    'flanker_stimulus,'
+                    'flanker_condition,'
+                    'flanker_correct,'
+                    'flanker_rt,'
+                    'flanker_response,'
+                    'flanker_response_accuracy,'
+                    'presentation,'
+                    'start_time,'
+                    'end_time,'
+                    'duration \n'
+                )
+            elif type == 'flanker_shape':
+                file.write(
+                    'experiment,'
+                    'subject_id,'
+                    'date,'
+                    'task,'
+                    'phase,'
+                    'main_trial,'
+                    'flanker_shape_trial,'
+                    'flanker_shape_stimulus,'
+                    'flanker_shape_condition,'
+                    'flanker_shape_correct,'
+                    'flanker_shape_rt,'
+                    'flanker_shape_response,'
+                    'flanker_shape_response_accuracy,'
+                    'presentation,'
+                    'start_time,'
+                    'end_time,'
+                    'duration \n'
+                )
 
     # Now append the result data
     with open(filename, 'a', newline='') as output_file:
         writer = csv.writer(output_file)
-        writer.writerow([
-            participant_info['experiment'],
-            participant_info['subject'],
-            participant_info['cur_date'],
-            result['task'],
-            result['trial'],
-            result['phase'],
-            result['stimulus_ID'],
-            result['stimulus'],
-            result['rand_Nr'],
-            result['stimulus_Rec'],
-            result['dot_Move_Dir'],
-            result['dot_1st_Frame'],
-            result['dot_Last_Frame'],
-            result['dot_Response_Key'],
-            result['dot_Response_Accuracy'],
-            result['rand_Nr_Calc'],
-            result['rand_Operation'],
-            result['answer_Calc'],
-            result['answer_Subject_Input'],
-            result['answer_Accuracy'],
-            result['nback_correct_responses'],
-            result['nback_false_responses'],
-            result['start_time'],
-            result['end_time'],
-            result['duration']
-        ])
+        if type == 'main':
+            writer.writerow([
+                participant_info['experiment'],
+                participant_info['subject'],
+                participant_info['cur_date'],
+                result['task'],
+                result['main_trial'],
+                result['phase'],
+                result['stimulus_id'],
+                result['stimulus'],
+                result['stimulus_rec'],
+                result['rand_nr'],
+                result['dot_direction'],
+                result['dot_1st_frame'],
+                result['dot_last_frame'],
+                result['dot_response_key'],
+                result['dot_response_accuracy'],
+                result['rand_nr_calc'],
+                result['rand_operation'],
+                result['answer_calc'],
+                result['answer_input'],
+                result['answer_input_accuracy'],
+                result['2back_matching_trials_single'],
+                result['2back_matching_trials_dual'],
+                result['2back_trial_accuracy_single'],
+                result['2back_trial_accuracy_dual'],
+                result['2back_trial_rt_correct_single'],
+                result['2back_trial_rt_correct_dual'],
+                result['2back_shape_order'],
+                result['flanker_nr_trials_single'],
+                result['flanker_nr_trials_dual'],
+                result['flanker_trial_accuracy_single'],
+                result['flanker_trial_accuracy_dual'],
+                result['flanker_trial_rt_correct_single'],
+                result['flanker_trial_rt_correct_dual'],
+                result['flanker_trial_rt_incorrect_single'],
+                result['flanker_trial_rt_incorrect_dual'],
+                result['flanker_shape_nr_trials_single'],
+                result['flanker_shape_nr_trials_dual'],
+                result['flanker_shape_trial_accuracy_single'],
+                result['flanker_shape_trial_accuracy_dual'],
+                result['flanker_shape_trial_rt_correct_single'],
+                result['flanker_shape_trial_rt_correct_dual'],
+                result['flanker_shape_trial_rt_incorrect_single'],
+                result['flanker_shape_trial_rt_incorrect_dual'],
+                result['start_time'],
+                result['end_time'],
+                result['duration']
+            ])
+        elif type == '2back':
+            writer.writerow([
+                participant_info['experiment'],
+                participant_info['subject'],
+                participant_info['cur_date'],
+                result['task'],
+                result['phase'],
+                result['main_trial'],
+                result['2back_trial'],
+                result['2back_trial_type'],
+                result['2back_accuracy'],
+                result['2back_response_type'],
+                result['2back_rt'],
+                result['2back_current_shape'],
+                result['2back_nback1_shape'],
+                result['2back_nback2_shape'],
+                result['presentation'],
+                result['start_time'],
+                result['end_time'],
+                result['duration']
+            ])
+        elif type == 'flanker':
+            writer.writerow([
+                participant_info['experiment'],
+                participant_info['subject'],
+                participant_info['cur_date'],
+                result['task'],
+                result['phase'],
+                result['main_trial'],
+                result['flanker_trial'],
+                result['flanker_stimulus'],
+                result['flanker_condition'],
+                result['flanker_correct'],
+                result['flanker_rt'],
+                result['flanker_response'],
+                result['flanker_response_accuracy'],
+                result['presentation'],
+                result['start_time'],
+                result['end_time'],
+                result['duration']
+            ])
+        elif type == 'flanker_shape':
+            writer.writerow([
+                participant_info['experiment'],
+                participant_info['subject'],
+                participant_info['cur_date'],
+                result['task'],
+                result['phase'],
+                result['main_trial'],
+                result['flanker_shape_trial'],
+                result['flanker_shape_stimulus'],
+                result['flanker_shape_condition'],
+                result['flanker_shape_correct'],
+                result['flanker_shape_rt'],
+                result['flanker_shape_response'],
+                result['flanker_shape_response_accuracy'],
+                result['presentation'],
+                result['start_time'],
+                result['end_time'],
+                result['duration']
+            ])
