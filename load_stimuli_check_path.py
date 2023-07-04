@@ -36,13 +36,13 @@ def check_config_paths(stim_path, output_path, pics_path, record_path, shapes_pa
         os.mkdir(record_path)
 
 
-def load_and_randomize(stim_path):
+def load_and_randomize(stim_path, task):
     """
     Load stimuli data from an Excel file, randomize the coordinates without consecutive repetitions,
     and return a list containing practice and randomized coordinates data.
 
     Returns:
-        stimulus_Type (list): A list containing two dataframes - practice data and randomized coordinates data.
+        stimulus_type (list): A list containing two dataframes - practice data and randomized coordinates data.
     """
     try:
         # save all data from all cols and rows in dataframe
@@ -67,23 +67,30 @@ def load_and_randomize(stim_path):
 
     while not randomized:
         # Randomize the order of coordinates
-        rand_Coordinates = coordinates.sample(frac=1).reset_index(drop=True)
+        if task == "single":
+            rand_coordinates = coordinates.sample(frac=1).reset_index(drop=True)
+        elif task == "dual_number_dots":
+            rand_coordinates = coordinates.sample(frac=1).reset_index(drop=True)
+        elif task == "dual_number_beep_press":
+            rand_coordinates = coordinates.sample(frac=1).reset_index(drop=True)
+        else:
+            rand_coordinates = coordinates.sample(frac=1).reset_index(drop=True)
 
         # check for repeats
-        for i in range(0, len(rand_Coordinates)):
-            if i >= len(rand_Coordinates) - 3:
-                # rand_Coordinates.to_csv('rand_Coordinates_%s.csv' % i)
+        for i in range(0, len(rand_coordinates)):
+            if i >= len(rand_coordinates) - 3:
+                # rand_coordinates.to_csv('rand_Coordinates_%s.csv' % i)
                 randomized = True
             elif \
-                    rand_Coordinates['condition'][i] == rand_Coordinates['condition'][i + 1] and \
-                            rand_Coordinates['condition'][i] == rand_Coordinates['condition'][i + 2] and \
-                            rand_Coordinates['condition'][i] == rand_Coordinates['condition'][i + 3] or \
-                    rand_Coordinates['name1'][i] == rand_Coordinates['name1'][i + 1] and \
-                            rand_Coordinates['name1'][i] == rand_Coordinates['name1'][i + 2]:
-                # rand_Coordinates.to_csv('rand_Coordinates_%s.csv' % i)
+                    rand_coordinates['condition'][i] == rand_coordinates['condition'][i + 1] and \
+                            rand_coordinates['condition'][i] == rand_coordinates['condition'][i + 2] and \
+                            rand_coordinates['condition'][i] == rand_coordinates['condition'][i + 3] or \
+                    rand_coordinates['name1'][i] == rand_coordinates['name1'][i + 1] and \
+                            rand_coordinates['name1'][i] == rand_coordinates['name1'][i + 2]:
+                # rand_coordinates.to_csv('rand_Coordinates_%s.csv' % i)
                 break
 
-    # Append practice data and randomized coordinates data to stimulus_Type
-    stimulus_Type = [practice, rand_Coordinates]
+    # Append practice data and randomized coordinates data to stimulus_type
+    stimulus_type = [practice, rand_coordinates]
 
-    return stimulus_Type
+    return stimulus_type

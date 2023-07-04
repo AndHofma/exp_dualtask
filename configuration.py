@@ -1,7 +1,7 @@
 """
 Experiment Preparation and Execution
 This section of code prepares and executes the experiment.
-It starts by defining the preferred audio library and setting up paths for stimuli, results, pictograms, and recordings.
+It starts by defining the preferred audio library and setting up paths for stimuli, results, and recordings.
 Next, the create_window function creates a new window for the experiment using the PsychoPy visual.Window object.
 The initialize_stimuli function sets up all the visual and auditory stimuli as well as parameter values needed for the experiment.
 The get_participant_info function retrieves information about the participant.
@@ -27,49 +27,48 @@ record_path = 'recordings/'
 # directory to shapes images for dual-task version
 shapes_path = 'shapes/'
 
-# Get a list of all file paths in the shapes directory
-shapes_list = [os.path.join(shapes_path, f) for f in os.listdir(shapes_path)]
 
-def create_window():
-    """
-    Create and initialize the experiment window.
-
-    Returns:
-    win: A PsychoPy visual.Window object for the experiment.
-    """
-    # Create a monitor object for the second screen
-    second_monitor = monitors.Monitor(name='EA273WMi')
-    # Set the appropriate settings for the second monitor
-    second_monitor.setSizePix((1920, 1080))  # Set the desired resolution of the second screen
-
-    # Create and return a window for the experiment on the second monitor
-    return visual.Window(monitor=second_monitor,  # Use the second monitor
-                         size=(1920, 1080),
-                         screen=1,  # Specify the index of the second screen (0 for the first screen, 1 for the second, etc.)
-                         allowGUI=True,
-                         fullscr=True,
-                         color=(255, 255, 255)
-                         )
-
-
-# to use for testing on laptop
-# def create_window():
+# to use in acoustic lab - second monitor name fixed here
+#def create_window():
 #    """
 #    Create and initialize the experiment window.
 #
 #    Returns:
-#    win : A PsychoPy visual.Window object for the experiment.
+#    win: A PsychoPy visual.Window object for the experiment.
 #    """
-#    # Create a monitor object
-#    currentMonitor = monitors.Monitor(name='testMonitor')
+#    # Create a monitor object for the second screen
+#    second_monitor = monitors.Monitor(name='EA273WMi')
+#    # Set the appropriate settings for the second monitor
+#    second_monitor.setSizePix((1920, 1080))  # Set the desired resolution of the second screen
 #
-#    # Create and return a window for the experiment
-#    return visual.Window(monitors.Monitor.getSizePix(currentMonitor),
-#                         monitor="testMonitor",
+#    # Create and return a window for the experiment on the second monitor
+#    return visual.Window(monitor=second_monitor,  # Use the second monitor
+#                         size=(1920, 1080),
+#                         screen=1,  # Specify the index of the second screen (0 for the first screen, 1 for the second, etc.)
 #                         allowGUI=True,
 #                         fullscr=True,
 #                         color=(255, 255, 255)
 #                         )
+
+
+# to use for testing on laptop
+def create_window():
+   """
+   Create and initialize the experiment window.
+   Returns:
+   win : A PsychoPy visual.Window object for the experiment.
+   """
+
+   # Create a monitor object
+   currentMonitor = monitors.Monitor(name='testMonitor')
+
+   # Create and return a window for the experiment
+   return visual.Window(monitors.Monitor.getSizePix(currentMonitor),
+                        monitor="testMonitor",
+                        allowGUI=True,
+                        fullscr=True,
+                        color=(255, 255, 255)
+                        )
 
 
 def initialize_stimuli(window):
@@ -105,15 +104,12 @@ def initialize_stimuli(window):
                                  name='randNumber')
     # item (aka stimulus or name coordinate) from list
     item = visual.TextStim(window,
-                           pos=(0, 0.5),
+                           pos=(0, 0),
                            height=0.25,
                            wrapWidth=2,
                            color="black",
                            name='item')
-    # pictogram
-    pic = visual.ImageStim(window,
-                           pos=(0, 0.1),
-                           name='pictogram')
+
     # response prompt
     prompt = visual.TextStim(window,
                              color='black',
@@ -123,18 +119,7 @@ def initialize_stimuli(window):
                                pos=(0, 0),
                                wrapWidth=2,
                                height=0.2)
-    # create an empty text stimulus to serve as the input field
-    input_text = visual.TextStim(window,
-                                 text="",
-                                 color='black',
-                                 pos=(0, -0.3),
-                                 wrapWidth=2)
 
-    # allowed keys are all numbers from the numpad and the num keys from the keyboard
-    # return to complete entry / backspace to remove an error
-    keyList = ['num_0', 'num_1', 'num_2', 'num_3', 'num_4', 'num_5', 'num_6', 'num_7', 'num_8', 'num_9',
-               '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-               'return', 'backspace']
 
     # default parameters for the recordings
     fs = 44100  # Sample rate
@@ -161,39 +146,60 @@ def initialize_stimuli(window):
     dots = visual.DotStim(
         win=window,  # window where the stimulus will be drawn
         units='pix',  # units of size and position (pixels in this case)
-        fieldPos=(0, -280),  # position of the center of the stimulus field
+        fieldPos=(0, 0),  # position of the center of the stimulus field
         fieldShape="circle",  # shape of the stimulus field (circle in this case)
         dotSize=dot_size,  # size of each dot in pixels
         dotLife=-1,  # duration of each dot in frames (-1 for unlimited)
         coherence=dot_coherence,  # proportion of dots that move in the same direction
         nDots=n_dots,  # number of dots in the stimulus
-        fieldSize=400,  # size of the stimulus field in pixels
+        fieldSize=800,  # size of the stimulus field in pixels
         speed=dot_speed,  # speed of the dots in pixels per frame
         color=(0, 0, 0),  # color of the dots (black in this case)
         colorSpace='rgb'  # color space used to specify the color (RGB in this case)
     )
 
     # arrow parameters
-    arrowPositions = [[0.12, -0.45], [0, -0.25], [-0.12, -0.45], [0, -0.65]]  # position in the x-y-coordinate system
+    arrowPositions = [[0.18,0], [0,0.28], [-0.18,0], [0,-0.28]]  # position in the x-y-coordinate system
+    arrowPositions_small = [[0.13, 0], [0, 0.23], [-0.13, 0], [0, -0.23]]  # position in the x-y-coordinate system
     arrowOrientations = [0, -90, -180, -270]  # rotation in degrees
-    arrowSize = 0.5  # size in pixels?
+    arrowSize = 0.2  # size in pixels?
+    arrowSize_small = 0.12  # size in pixels?
     arrows = []  # empty list to append to
+    arrows_small =  []
 
     # generate all arrows in correct orientation
     for i in range(4):
-        arrow = visual.TextStim(window,
-                                text='\u21e8',
+        arrow = visual.ImageStim(window,
+                                image=os.path.join(pics_path, 'next.png'),
                                 pos=arrowPositions[i],
-                                height=arrowSize,
-                                ori=arrowOrientations[i],
-                                color='black')
+                                size=arrowSize,
+                                ori=arrowOrientations[i])
         arrows.append(arrow)
 
-    # possible mathematical operations for calculation part of the dual task
-    # operations[0]=addition, operations[1]=subtraction
-    operations = [lambda x, y: x + y, lambda x, y: x - y]  # Define operations for dual task
+        arrow_small = visual.ImageStim(window,
+                                 image=os.path.join(pics_path, 'next.png'),
+                                 pos=arrowPositions_small[i],
+                                 size=arrowSize_small,
+                                 ori=arrowOrientations[i])
+        arrows_small.append(arrow_small)
 
-    return werKommt, fixation, randNumber, item, pic, prompt, feedback, input_text, keyList, fs, rec_seconds, movementDirections, responseList, dots, operations, arrows
+    # number parameters
+    number_prompts_positions = [[0.29,0], [0,0.41], [-0.29,0], [0,-0.4]]  # position in the x-y-coordinate system
+    number_prompts_size = 0.2  # size in pixels?
+
+    number_prompts = []
+    for i in range(4):
+        number_prompt = visual.TextStim(
+            win=window,
+            text="0",  # placeholder text
+            pos=number_prompts_positions[i],
+            height=number_prompts_size,
+            color='black'
+        )
+        number_prompts.append(number_prompt)
+
+
+    return werKommt, fixation, randNumber, item, prompt, feedback, fs, rec_seconds, movementDirections, responseList, dots, arrows, arrows_small, number_prompts
 
 
 def get_participant_info():
@@ -224,55 +230,182 @@ def get_participant_info():
 
 
 # Function to append a single result to the CSV file
-def append_result_to_csv(result, filename, participant_info):
+def append_result_to_csv(result, base_filename, participant_info, type='main'):
     """
-    Append a participant's trial result to a CSV file. If the file doesn't exist, it creates the file and adds headers.
+    Append a participant's trial result to a CSV file.
+    The CSV files correspond to the different dual-task versions (2back, flanker, flanker_shape) and the main CSV file with general parameters throughout all experiment parts.
+    The main CSV file includes the single task parameter values as well as the dot-motion and calculation task parameters, which is the first dual-task option hereafter.
+    If the file doesn't exist, it creates the file and adds headers.
 
     Args:
     result : dict. Contains the data for a single trial.
     filename : str. The filename of the CSV file.
     participant_info : dict. Contains the participant's information.
+    type : str. Can be 'main' for the main trial results, 'flanker' for flanker task results, and '2back' for 2-back task results.
 
     Returns:
-    None. The function directly writes to the CSV file.
+        None. The function directly writes to the CSV file.
+
+    Raises:
+        OSError: If there is an issue with accessing or writing to the CSV file.
+
+    Notes:
+        - The CSV file will be named "{base_filename}_{type}.csv".
+        - The function appends the result data to the CSV file.
+        - If the CSV file does not exist, it creates the file and adds the appropriate headers.
+
     """
+
+    # Define the filename by appending the type of the task to the base filename
+    filename = f"{base_filename}_{type}.csv"
 
     # Check if the file does not exist to write the header
     if not os.path.isfile(filename):
         with open(filename, 'w') as file:
-            file.write(
-                'experiment,subject_ID,date,task,trial,phase,stimulus_ID,stimulus,rand_nr,stimulus_rec,dot_move_dir,'
-                'dot_1st_frame,dot_last_lrame,dot_response_key,dot_response_accuracy,rand_nr_calc,rand_operation,'
-                'answer_calc,answer_subject_input,answer_accuracy,2-back_accuracy,2-back_errors,start_time,end_time,duration \n'
-            )
-
+            if type == 'main':
+                file.write(
+                'experiment,'
+                'subject_ID,'
+                'date,'
+                'task,'
+                'main_trial,'
+                'phase,'
+                'stimulus_id,'
+                'stimulus,'
+                'stimulus_rec,'
+                'rand_nr,'
+                'dot_direction,'
+                'dot_1st_frame,'
+                'dot_last_frame,'
+                'dot_response_key,'
+                'dot_response_accuracy,'
+                'number_selection,'
+                'index_rand_nr,'
+                'index_number_response,'
+                'number_response_accuracy,'
+                'beep_sequence,'
+                'beep_press_trials,'
+                'beep_press_deviant_trials,'
+                'beep_press_normal_trials,'
+                'beep_press_rt_correct,'
+                'beep_press_rt_incorrect,'
+                'beep_press_accuracy,'
+                'beep_count_trials,'
+                'beep_count_deviant_trials,'
+                'beep_count_normal_trials,'
+                'beep_count_number_selection,'
+                'beep_count_index_correct_count,'            
+                'beep_count_response,'
+                'beep_count_response_accuracy,'
+                'start_time,'
+                'end_time,'
+                'duration \n'
+                )
+            elif type == 'beep_press':
+                file.write(
+                    'experiment,'
+                    'subject_id,'
+                    'date,'
+                    'task,'
+                    'phase,'
+                    'main_trial,'
+                    'beep_press_trial,'
+                    'beep_press_stimulus,'
+                    'beep_press_rt,'
+                    'beep_press_response_type,'
+                    'beep_press_accuracy,'
+                    'presentation,'
+                    'start_time,'
+                    'end_time,'
+                    'duration \n'
+                )
+            elif type == 'beep_count':
+                file.write(
+                    'experiment,'
+                    'subject_id,'
+                    'date,'
+                    'task,'
+                    'phase,'
+                    'main_trial,'
+                    'beep_count_trial,'
+                    'beep_count_stimulus,'
+                    'presentation,'
+                    'start_time,'
+                    'end_time,'
+                    'duration \n'
+                )
     # Now append the result data
     with open(filename, 'a', newline='') as output_file:
         writer = csv.writer(output_file)
-        writer.writerow([
-            participant_info['experiment'],
-            participant_info['subject'],
-            participant_info['cur_date'],
-            result['task'],
-            result['trial'],
-            result['phase'],
-            result['stimulus_ID'],
-            result['stimulus'],
-            result['rand_Nr'],
-            result['stimulus_Rec'],
-            result['dot_Move_Dir'],
-            result['dot_1st_Frame'],
-            result['dot_Last_Frame'],
-            result['dot_Response_Key'],
-            result['dot_Response_Accuracy'],
-            result['rand_Nr_Calc'],
-            result['rand_Operation'],
-            result['answer_Calc'],
-            result['answer_Subject_Input'],
-            result['answer_Accuracy'],
-            result['nback_correct_responses'],
-            result['nback_false_responses'],
-            result['start_time'],
-            result['end_time'],
-            result['duration']
-        ])
+        if type == 'main':
+            writer.writerow([
+                participant_info['experiment'],
+                participant_info['subject'],
+                participant_info['cur_date'],
+                result['task'],
+                result['main_trial'],
+                result['phase'],
+                result['stimulus_id'],
+                result['stimulus'],
+                result['stimulus_rec'],
+                result['rand_nr'],
+                result['dot_direction'],
+                result['dot_1st_frame'],
+                result['dot_last_frame'],
+                result['dot_response_key'],
+                result['dot_response_accuracy'],
+                result['number_selection'],
+                result['index_rand_nr'],
+                result['index_number_response'],
+                result['number_response_accuracy'],
+                result['beep_sequence'],
+                result['beep_press_trials'],
+                result['beep_press_deviant_trials'],
+                result['beep_press_normal_trials'],
+                result['beep_press_rt_correct'],
+                result['beep_press_rt_incorrect'],
+                result['beep_press_accuracy'],
+                result['beep_count_trials'],
+                result['beep_count_deviant_trials'],
+                result['beep_count_normal_trials'],
+                result['beep_count_number_selection'],
+                result['beep_count_index_correct_count'],
+                result['beep_count_response'],
+                result['beep_count_response_accuracy'],
+                result['start_time'],
+                result['end_time'],
+                result['duration']
+            ])
+        elif type == 'beep_press':
+            writer.writerow([
+                participant_info['experiment'],
+                participant_info['subject'],
+                participant_info['cur_date'],
+                result['task'],
+                result['phase'],
+                result['main_trial'],
+                result['beep_press_trial'],
+                result['beep_press_stimulus'],
+                result['beep_press_rt'],
+                result['beep_press_response_type'],
+                result['beep_press_accuracy'],
+                result['presentation'],
+                result['start_time'],
+                result['end_time'],
+                result['duration']
+            ])
+        elif type == 'beep_count':
+            writer.writerow([
+                participant_info['experiment'],
+                participant_info['subject'],
+                participant_info['cur_date'],
+                result['task'],
+                result['phase'],
+                result['main_trial'],
+                result['beep_count_trial'],
+                result['beep_count_stimulus'],
+                result['presentation'],
+                result['start_time'],
+                result['end_time'],
+                result['duration']
+            ])

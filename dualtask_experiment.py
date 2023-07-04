@@ -14,7 +14,7 @@ Detailed inline comments have been added to help understand the flow and functio
 
 # Import necessary PsychoPy libraries
 from load_stimuli_check_path import check_config_paths, load_and_randomize
-from configuration import get_participant_info, initialize_stimuli, create_window, stim_path, output_path, pics_path, record_path, shapes_path, shapes_list
+from configuration import get_participant_info, initialize_stimuli, create_window, stim_path, output_path, pics_path, record_path, shapes_path
 from task_setup import execute_task, display_and_wait, display_text_and_wait
 from psychopy import core
 from instructions import *
@@ -22,204 +22,242 @@ from instructions import *
 # Checking validity of paths for stimuli and output
 check_config_paths(stim_path, output_path, pics_path, record_path, shapes_path)
 # Loading and randomizing the stimulus types
-stimulus_Type = load_and_randomize(stim_path)
+stimuli_single = load_and_randomize(stim_path, 'single')
+stimuli_dual_number_dots = load_and_randomize(stim_path, 'dual_number_dots')
+stimuli_dual_number_beep_press = load_and_randomize(stim_path, 'dual_number_beep_press')
+stimuli_dual_beep_count_dots = load_and_randomize(stim_path, 'dual_beep_count_dots')
 
-# For debugging
-# print(f"List randomized stimuli: {stimulus_Type[1]}")
+# for debugging
+"""print(f'stimuli_single: {stimuli_single}')
+print(f'stimuli_single: {stimuli_dual_number_dots}')
+print(f'stimuli_single: {stimuli_dual_number_beep_press}')
+print(f'stimuli_single: {stimuli_dual_beep_count_dots}')"""
+
+
+# this is just for debugging and piloting
+stimuli_single[0] = stimuli_single[0][:6]
+stimuli_single[1] = stimuli_single[1][:20]
+
+stimuli_dual_number_dots[0] = stimuli_dual_number_dots[0][:6]
+stimuli_dual_number_dots[1] = stimuli_dual_number_dots[1][:20]
+
+stimuli_dual_number_beep_press[0] = stimuli_dual_number_beep_press[0][:6]
+stimuli_dual_number_beep_press[1] = stimuli_dual_number_beep_press[1][:20]
+
+stimuli_dual_beep_count_dots[0] = stimuli_dual_beep_count_dots[0][:6]
+stimuli_dual_beep_count_dots[1] = stimuli_dual_beep_count_dots[1][:20]
 
 # Get participant information
 participant_info = get_participant_info()
 # Creating the display window
 window = create_window()
 # Initializing all stimuli
-werKommt, fixation, randNumber, item, pic, prompt, feedback, input_text, keyList, fs, rec_seconds, movementDirections, responseList, dots, operations, arrows = initialize_stimuli(window)
+werKommt, fixation, randNumber, item, prompt, feedback, fs, rec_seconds, movementDirections, responseList, dots, arrows, arrows_small, number_prompts = initialize_stimuli(window)
 
-"""
 # Starting the experiment by displaying the instruction for the single task
 display_text_and_wait(instructSingleTask1, window)
 if display_text_and_wait(instructSingleTask2, window):
     display_text_and_wait(instructPracticeSingleTaskStart, window)
 
 # Running the single task practice session
-# execute_task(stimulus_Type[0], 'practice_singleTask')  # practice items = stimulus_Type[0]
+# practice items = stimuli_single[0]
 execute_task(window=window,
              task_name='practice_singleTask',
              participant_info=participant_info,
-             stimuli=stimulus_Type[0],
+             stimuli=stimuli_single[0],
              werKommt=werKommt,
              fixation=fixation,
              randNumber=randNumber,
              item=item,
-             pic=pic,
              prompt=prompt,
              feedback=feedback,
-             input_text=input_text,
-             keyList=keyList,
              fs=fs,
              rec_seconds=rec_seconds,
              movementDirections=movementDirections,
              responseList=responseList,
              dots=dots,
-             operations=operations,
              arrows=arrows,
-             shapes_list=shapes_list,
-             pics_path=pics_path
+             arrows_small = arrows_small,
+             number_prompts=number_prompts,
              )
 
 # Running the single task test session
-# execute_task(stimulus_Type[1], 'test_singleTask')  # test items = stimulus_Type[1]
+# test items = stimuli_single[1]
 execute_task(window=window,
              task_name='test_singleTask',
              participant_info=participant_info,
-             stimuli=stimulus_Type[1],
+             stimuli=stimuli_single[1],
              werKommt=werKommt,
              fixation=fixation,
              randNumber=randNumber,
              item=item,
-             pic=pic,
              prompt=prompt,
              feedback=feedback,
-             input_text=input_text,
-             keyList=keyList,
              fs=fs,
              rec_seconds=rec_seconds,
              movementDirections=movementDirections,
              responseList=responseList,
              dots=dots,
-             operations=operations,
              arrows=arrows,
-             shapes_list=shapes_list,
-             pics_path=pics_path
+             arrows_small = arrows_small,
+             number_prompts=number_prompts,
              )
 
 # Displaying the instruction for the dual task
-display_text_and_wait(instructDualTask1, window)
-if display_text_and_wait(instructDualTask2, window):
-    display_text_and_wait(instructPracticeDualTaskStart, window)
+display_text_and_wait(instructDualTask_number_dots_1, window)
+if display_text_and_wait(instructDualTask_number_dots_2, window):
+    display_text_and_wait(instructPracticeDualTask_number_dots_Start, window)
 
 # Running the dual task practice session
-# execute_task(stimulus_Type[0], 'practice_dualTask', dual_task=True)  # practice items = stimulus_Type[0]
+# practice items = stimuli_dual_number_dots[0]
 execute_task(window=window,
-             task_name='practice_dualTask',
+             task_name='practice_dualTask_number_dots',
              participant_info=participant_info,
-             stimuli=stimulus_Type[0],
+             stimuli=stimuli_dual_number_dots[0],
              werKommt=werKommt,
              fixation=fixation,
              randNumber=randNumber,
              item=item,
-             pic=pic,
              prompt=prompt,
              feedback=feedback,
-             input_text=input_text,
-             keyList=keyList,
              fs=fs,
              rec_seconds=rec_seconds,
              movementDirections=movementDirections,
              responseList=responseList,
              dots=dots,
-             operations=operations,
              arrows=arrows,
-             pics_path=pics_path,
-             shapes_list=shapes_list,             
+             arrows_small=arrows_small,
+             number_prompts=number_prompts,
              dual_task=True
              )
 
 # Running the dual task test session
-# execute_task(stimulus_Type[1], 'test_dualTask', dual_task=True)  # randomized coordinates = stimulus_Type[1]
+# randomized coordinates = stimuli_dual_number_dots[1]
 execute_task(window=window,
-             task_name='test_dualTask',
+             task_name='test_dualTask_number_dots',
              participant_info=participant_info,
-             stimuli=stimulus_Type[1],
+             stimuli=stimuli_dual_number_dots[1],
              werKommt=werKommt,
              fixation=fixation,
              randNumber=randNumber,
              item=item,
-             pic=pic,
              prompt=prompt,
              feedback=feedback,
-             input_text=input_text,
-             keyList=keyList,
              fs=fs,
              rec_seconds=rec_seconds,
              movementDirections=movementDirections,
              responseList=responseList,
              dots=dots,
-             operations=operations,
              arrows=arrows,
-             pics_path=pics_path,
-             shapes_list=shapes_list,
+             arrows_small=arrows_small,
+             number_prompts=number_prompts,
              dual_task=True  # or True if you want to execute a dual task
              )
-"""
 
-
-# Displaying the instruction for the dual task
-display_text_and_wait(instructDualTask_2back1, window)
-display_text_and_wait(instructPracticeDualTask_2backEnd, window)
+# Displaying the instruction for the dot motion, calculation and beep deviation dual task
+if display_text_and_wait(instructDualTask_number_beep_press_1, window):
+    display_text_and_wait(instructDualTask_number_beep_press_2, window)
 
 # Running the dual task practice session
-# execute_task(stimulus_Type[0], 'practice_dualTask', dual_task=True)  # practice items = stimulus_Type[0]
+# practice items = stimuli_dual_number_beep_press[0]
 execute_task(window=window,
-             task_name='practice_dualTask_2back',
+             task_name='practice_dualTask_number_beep_press',
              participant_info=participant_info,
-             stimuli=stimulus_Type[0],
+             stimuli=stimuli_dual_number_beep_press[0],
              werKommt=werKommt,
              fixation=fixation,
              randNumber=randNumber,
              item=item,
-             pic=pic,
              prompt=prompt,
              feedback=feedback,
-             input_text=input_text,
-             keyList=keyList,
              fs=fs,
              rec_seconds=rec_seconds,
              movementDirections=movementDirections,
              responseList=responseList,
              dots=dots,
-             operations=operations,
              arrows=arrows,
-             pics_path=pics_path,
-             shapes_list=shapes_list,
+             arrows_small = arrows_small,
+             number_prompts=number_prompts,
              dual_task=True
              )
 
-# Running the dual task test session
-# execute_task(stimulus_Type[1], 'test_dualTask', dual_task=True)  # randomized coordinates = stimulus_Type[1]
+# Running the dual task 2-back test session
+# randomized coordinates = stimuli_dual_number_beep_press[1]
 execute_task(window=window,
-             task_name='test_dualTask_2back',
+             task_name='test_dualTask_number_beep_press',
              participant_info=participant_info,
-             stimuli=stimulus_Type[1],
+             stimuli=stimuli_dual_number_beep_press[1],
              werKommt=werKommt,
              fixation=fixation,
              randNumber=randNumber,
              item=item,
-             pic=pic,
              prompt=prompt,
              feedback=feedback,
-             input_text=input_text,
-             keyList=keyList,
              fs=fs,
              rec_seconds=rec_seconds,
              movementDirections=movementDirections,
              responseList=responseList,
              dots=dots,
-             operations=operations,
              arrows=arrows,
-             pics_path=pics_path,
-             shapes_list=shapes_list,
+             arrows_small = arrows_small,
+             number_prompts=number_prompts,
+             dual_task=True  # or True if you want to execute a dual task
+             )
+
+# Displaying the instruction for the dot motion, calculation and beep deviation dual task
+if display_text_and_wait(instructDualTask_beep_count_dots_1, window):
+    display_text_and_wait(instructDualTask_beep_count_dots_2, window)
+
+# Running the dual task practice session
+# practice items = stimuli_dual_beep_count_dots[0]
+execute_task(window=window,
+             task_name='practice_dualTask_beep_count_dots',
+             participant_info=participant_info,
+             stimuli=stimuli_dual_beep_count_dots[0],
+             werKommt=werKommt,
+             fixation=fixation,
+             randNumber=randNumber,
+             item=item,
+             prompt=prompt,
+             feedback=feedback,
+             fs=fs,
+             rec_seconds=rec_seconds,
+             movementDirections=movementDirections,
+             responseList=responseList,
+             dots=dots,
+             arrows=arrows,
+             arrows_small = arrows_small,
+             number_prompts=number_prompts,
+             dual_task=True
+             )
+
+# Running the dual task 2-back test session
+# randomized coordinates = stimuli_dual_beep_count_dots[1]
+execute_task(window=window,
+             task_name='test_dualTask_beep_count_dots',
+             participant_info=participant_info,
+             stimuli=stimuli_dual_beep_count_dots[1],
+             werKommt=werKommt,
+             fixation=fixation,
+             randNumber=randNumber,
+             item=item,
+             prompt=prompt,
+             feedback=feedback,
+             fs=fs,
+             rec_seconds=rec_seconds,
+             movementDirections=movementDirections,
+             responseList=responseList,
+             dots=dots,
+             arrows=arrows,
+             arrows_small = arrows_small,
+             number_prompts=number_prompts,
              dual_task=True  # or True if you want to execute a dual task
              )
 
 # Show last prompt to end experiment with keypress
-prompt.setText('Geschafft! \n Vielen Dank! \n Drücken Sie eine Taste, um das Experiment zu beenden.')
-display_and_wait(prompt, window)
-window.close()
-core.quit()
-
-
-# Show last prompt to end experiment with keypress
-prompt.setText('Geschafft! \n Vielen Dank! \n Drücken Sie eine Taste, um das Experiment zu beenden.')
+prompt.setText('Geschafft! \n Vielen Dank! \n Drücken Sie die Eingabetaste (Enter), um das Experiment zu beenden.')
+prompt.height = 0.2
+prompt.pos = [0, 0]
 display_and_wait(prompt, window)
 window.close()
 core.quit()
