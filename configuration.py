@@ -24,8 +24,6 @@ output_path = 'results/'
 pics_path = 'pics/'
 # directory for all recordings
 record_path = 'recordings/'
-# directory to shapes images for dual-task version
-shapes_path = 'shapes/'
 
 
 # to use in acoustic lab - second monitor name fixed here
@@ -76,10 +74,25 @@ def initialize_stimuli(window):
     Initialize all the stimuli that will be used throughout the experiment.
 
     Args:
-    window : psychopy.visual.Window. The window object in which the stimuli will be displayed.
+        window (psychopy.visual.Window): The window object in which the stimuli will be displayed.
 
     Returns:
-    A tuple containing all the stimuli and other related objects.
+        tuple: A tuple containing all the stimuli and other related objects, which includes:
+
+            werKommt (psychopy.visual.TextStim): Text stimulus for triggering question.
+            fixation (psychopy.visual.ShapeStim): Visual stimulus for fixation cross.
+            randNumber (psychopy.visual.TextStim): Text stimulus for displaying random number to be remembered.
+            item (psychopy.visual.TextStim): Text stimulus for displaying item (stimulus or name coordinate) from list.
+            prompt (psychopy.visual.TextStim): Text stimulus for displaying response prompt.
+            feedback (psychopy.visual.TextStim): Text stimulus for displaying feedback.
+            fs (int): Sample rate for recordings.
+            rec_seconds (float): Recording duration in seconds, calculated based on visual frames and estimated frame rate.
+            movementDirections (list): Possible directions for the dots to move.
+            responseList (list): Corresponding responses to the movement directions.
+            dots (psychopy.visual.DotStim): Dot stimulus object.
+            arrows (list): List of visual.ImageStim objects representing arrows in different orientations.
+            arrows_small (list): List of smaller visual.ImageStim objects representing arrows in different orientations.
+            number_prompts (list): List of visual.TextStim objects for number prompts in different positions.
     """
 
     # set up different TextStim needed throughout experiment
@@ -204,10 +217,19 @@ def initialize_stimuli(window):
 
 def get_participant_info():
     """
-    Open a dialogue box to get participant information, including current date and time, subject_ID and experiment name.
+    Open a dialogue box to get participant information, including the current date and time, subject_ID, and experiment name.
+
+    The function creates a dialogue box with pre-defined experiment parameters such as experiment name and the current date.
+    The user is then required to input their unique subject ID.
 
     Returns:
-    A dictionary containing the participant's information.
+        dict: A dictionary containing the participant's information, which includes:
+            - 'experiment' (str): The name of the experiment, in this case, 'dual_task_experiment'.
+            - 'subject' (str): The subject's unique identifier entered by the participant.
+            - 'cur_date' (str): The current date and time when the function is executed, in 'YYYY-MM-DD_HHhMM' format.
+
+    If the user cancels the dialog box, the function will terminate the experiment by calling core.quit().
+
     """
 
     # Define experiment name and configuration
@@ -232,19 +254,21 @@ def get_participant_info():
 # Function to append a single result to the CSV file
 def append_result_to_csv(result, base_filename, participant_info, type='main'):
     """
-    Append a participant's trial result to a CSV file.
-    The CSV files correspond to the different dual-task versions (2back, flanker, flanker_shape) and the main CSV file with general parameters throughout all experiment parts.
-    The main CSV file includes the single task parameter values as well as the dot-motion and calculation task parameters, which is the first dual-task option hereafter.
-    If the file doesn't exist, it creates the file and adds headers.
+    Append a participant's trial result to a CSV file. This can correspond to different task results and the main CSV file with general parameters
+    throughout all experiment parts. The main CSV file includes the single task parameter values as well as the dot-motion and calculation task parameters.
+
+    The function takes in a dictionary of results and participant information, and a filename, then appends the results to the respective CSV file
+    (either the main, beep_press, or beep_count file). If the file doesn't exist, it will create the file and add headers.
 
     Args:
-    result : dict. Contains the data for a single trial.
-    filename : str. The filename of the CSV file.
-    participant_info : dict. Contains the participant's information.
-    type : str. Can be 'main' for the main trial results, 'flanker' for flanker task results, and '2back' for 2-back task results.
+        result (dict): A dictionary containing the data for a single trial.
+        base_filename (str): The base name of the CSV file to which results are appended.
+        participant_info (dict): A dictionary containing the participant's information, including experiment name, subject ID, and date.
+        type (str, optional): Determines the type of task for which results are being recorded. It can be 'main' for the main trial results,
+        'beep_press' for beep press task results, and 'beep_count' for beep count task results. Defaults to 'main'.
 
     Returns:
-        None. The function directly writes to the CSV file.
+        None. The function directly writes the results to the CSV file.
 
     Raises:
         OSError: If there is an issue with accessing or writing to the CSV file.
@@ -252,8 +276,7 @@ def append_result_to_csv(result, base_filename, participant_info, type='main'):
     Notes:
         - The CSV file will be named "{base_filename}_{type}.csv".
         - The function appends the result data to the CSV file.
-        - If the CSV file does not exist, it creates the file and adds the appropriate headers.
-
+        - If the CSV file does not exist, it creates the file and adds the appropriate headers based on the type.
     """
 
     # Define the filename by appending the type of the task to the base filename

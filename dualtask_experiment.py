@@ -6,21 +6,22 @@ single task practice, single task test, dual task practice, and dual task test.
 The experiment finishes by displaying a 'thank you' message, closing the window, and saving the output.
 
 The single task involves reading aloud the presented stimuli,
-while the dual task requires participants to perform an additional task of identifying the movement direction
-of a set of dots and performing mathematical operations (addition or subtraction) on random numbers.
+while the dual task requires participants to perform an additional task of identifying a number that was to be remembered,
+ identifying the movement direction of a set of dots, counting high pitched beep sounds or reacting to high pitched
+ beep sounds with a keypress.
 
 Detailed inline comments have been added to help understand the flow and functionality of the script.
 """
 
 # Import necessary PsychoPy libraries
 from load_stimuli_check_path import check_config_paths, load_and_randomize
-from configuration import get_participant_info, initialize_stimuli, create_window, stim_path, output_path, pics_path, record_path, shapes_path
+from configuration import get_participant_info, initialize_stimuli, create_window, stim_path, output_path, pics_path, record_path
 from task_setup import execute_task, display_and_wait, display_text_and_wait
 from psychopy import core
 from instructions import *
 
 # Checking validity of paths for stimuli and output
-check_config_paths(stim_path, output_path, pics_path, record_path, shapes_path)
+check_config_paths(stim_path, output_path, pics_path, record_path)
 # Loading and randomizing the stimulus types
 stimuli_single = load_and_randomize(stim_path, 'single')
 stimuli_dual_number_dots = load_and_randomize(stim_path, 'dual_number_dots')

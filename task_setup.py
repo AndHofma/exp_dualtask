@@ -141,20 +141,52 @@ def execute_singleTask(window, results, subj_path_rec, stimuli, task_name, werKo
 def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, stimuli, task_name, werKommt,
                                  fixation, randNumber, item, prompt, feedback, fs, rec_seconds, movementDirections,
                                  responseList, dots, arrows, arrows_small, number_prompts, participant_info):
+    """
+    Execute the dual-task experiment, collect the data, and save it in a CSV file.
 
-    # List of random numbers, same order for every participant
+    The experiment involves tasks related to number recognition and dot movement. During the experiment,
+    participants view a stimulus, then report on the direction in which the majority of dots moved and the number they memorized.
+
+    Args:
+        window (Window): The window to display the experiment.
+        results (list of dict): The list to store experiment results.
+        base_filename (str): The base name of the CSV file to save results.
+        subj_path_rec (str): The path to the directory to save the recorded responses.
+        stimuli (pd.DataFrame): The dataframe containing stimuli data.
+        task_name (str): The name of the task ('practice_dualTask_number_dots' or 'test_dualTask_number_dots').
+        werKommt (VisualStim): Visual stimulus object for displaying a cue.
+        fixation (ShapeStim): The fixation point.
+        randNumber (TextStim): The random number to display.
+        item (TextStim): The TextStim object to display the stimulus.
+        prompt (TextStim): The TextStim object to display the instruction.
+        feedback (TextStim): The TextStim object to display the feedback.
+        fs (int): The sample rate for recording the participant's response.
+        rec_seconds (int): The duration in seconds to record the participant's response.
+        movementDirections (list of int): The list of possible movement directions for the dots.
+        responseList (list of str): The list of keys that can be pressed for response.
+        dots (DotStim): The DotStim object to display the moving dots.
+        arrows (list of ShapeStim): The list of ShapeStim objects to display arrows.
+        arrows_small (list of ShapeStim): The list of small ShapeStim objects to display arrows.
+        number_prompts (list of TextStim): The list of TextStim objects to display the number prompts.
+        participant_info (dict): The dictionary to store participant information.
+
+    Returns:
+        None
+
+    Notes:
+        - The function directly writes the results to the CSV file after each trial.
+    """
+
+    # Setting up random seed for reproducibility based on the task type
     if task_name == 'practice_dualTask_number_dots':
-        random.seed(42)  # Set a random seed for reproducibility - here to get same list of nrs for practice
-
+        random.seed(42)  # Seed for practice trials
     elif task_name == 'test_dualTask_number_dots':
-        random.seed(666)  # Set a random seed for reproducibility - here to get same list of nrs for test
-
+        random.seed(666)  # Seed for test trials
+    # Generating list of random numbers for each trial
     randNr = [random.randint(100, 999) for _ in range(len(stimuli))]
-
     # Initialize start time and start_time_str
     start_time = time.time()
     start_time_str = datetime.datetime.fromtimestamp(start_time).strftime('%H:%M:%S')
-
     # Iterate over stimuli
     for x in range(len(stimuli)):
         task = task_name
@@ -162,14 +194,12 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
         movement = random.choice(movementDirections)
         rand1stFrame = random.randint(40, 70)
         randLastFrame = random.randint(190, 220)
-
+        # Select and replace a number in the selection
         number_selection, correct_index = select_and_replace_number(task_name, randNr[x])
-
-        # now number_prompts have been created and are of the same length as number_selection
+        # Setting up number_prompts with numbers from number_selection
         for i in range(len(number_selection)):
             number_prompts[i].text = str(number_selection[i])  # set each prompt with corresponding number
-
-        # naming the TextStim to find it in the log-file
+        # Displaying the random number and setting its name and size for logging
         randNumber.setText(randNr[x])
         randNumber.name = 'randNumber_' + task_name + '_' + str(randNr)
         randNumber.size = 0.5
@@ -177,45 +207,36 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
         window.flip()
         core.wait(2.0)
         window.flip()
-
-        # naming the TextStim to find it in the log-file
+        # Displaying 'werKommt' text stimulus
         werKommt.name = 'werKommt'
         werKommt.draw()
         window.flip()
         core.wait(1.0)
         window.flip()
-
-        # naming the ShapeStim to find it in the log-file
+        # Displaying fixation cross
         fixation.name = 'fixation'
         fixation.draw()
         window.flip()
         core.wait(1.0)
         window.flip()
-
+        # Displaying stimulus
         stimulus = stimuli.loc[x]['item']
         item.setText(stimulus)
-        # naming the TextStim to find it in the log-file
         item.name = 'item_' + str(stimuli.loc[x]['ID'])
-
-        # start recording the participant response - reading out loud the stimulus
+        # Start recording the participant's response
         responseRecord = sd.rec(int(rec_seconds * fs), samplerate=fs, channels=1)
-
-        # draw item and pic for 300 frames - and the moving dots btw 40-70 up to 190-220 frames
-        for frame in range(300):
+        # Draw stimulus and dots for specific frames
+        for frame in range(350):
             item.draw()
             if rand1stFrame <= frame < randLastFrame:  # Present dots for subset of frames
                 dots.dir = movement
                 dots.draw()
             window.flip()
         sd.stop()  # stop the recording
-
-        # safe stimulus recording as wav file
-        write(os.path.join(subj_path_rec, 'dual_task_' + participant_info['subject'] + '_' + task_name + '_' + str(stimuli.loc[x]['ID']) + '.wav'), fs, responseRecord)
-
-        # naming the recording wav file to find it in the log-file
+        # Saving the response recording as a wav file
         responseRecordName = 'dual_task_' + participant_info['subject'] + '_' + task_name + '_' + str(stimuli.loc[x]['ID']) + '.wav'
-
-        # show first response screen
+        write(os.path.join(subj_path_rec, 'dual_task_' + participant_info['subject'] + '_' + task_name + '_' + str(stimuli.loc[x]['ID']) + '.wav'), fs, responseRecord)
+        # Displaying first response screen and collecting the response
         prompt.setText('In welche Richtung haben sich die meisten Punkte bewegt?\n Drücken Sie den entsprechenden Pfeil auf der Tastatur.')
         prompt.pos = (0, -0.6)
         prompt.size = 0.12
@@ -224,7 +245,6 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
         for arrow in arrows:
             arrow.draw()
         window.flip()
-
         # wait for a response - allowed are the key buttons on the keypad
         arrowKey = event.waitKeys(keyList=responseList)
         # compare input arrow key with movement direction to check accuracy
@@ -239,21 +259,17 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
             feedback.setColor('red')
             feedback.draw()
         window.flip()
-
         core.wait(2)
-
-        # show second response screen
+        # Displaying second response screen and collecting the response
         prompt.setText('Welche Nummer haben Sie sich gemerkt?\n Drücken Sie den entsprechenden Pfeil auf der Tastatur.')
         prompt.pos = (0, -0.75)
         prompt.size = 0.12
         prompt.draw()
-
         # now each number_prompt has a number from number_selection
         for number_prompt, arrow_small in zip(number_prompts, arrows_small):
             number_prompt.draw()  # draw each number_prompt
             arrow_small.draw()
         window.flip()
-
         # wait for a response - allowed are the key buttons on the keypad
         arrowKey_number = event.waitKeys(keyList=responseList)
         # compare input arrow key with movement direction to check accuracy
@@ -268,9 +284,7 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
             feedback.setColor('red')
             feedback.draw()
         window.flip()
-
         core.wait(2)
-
         # Record end time and duration
         end_time = time.time()
         end_time_str = datetime.datetime.fromtimestamp(end_time).strftime('%H:%M:%S')
@@ -278,7 +292,6 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
         hours, remainder = divmod(duration, 3600)
         minutes, seconds = divmod(remainder, 60)
         duration_str = '{:02d}:{:02d}:{:02d}'.format(int(hours), int(minutes), int(seconds))
-
         # Prepare the result dictionary
         results.append({
             'task': task,
@@ -322,6 +335,56 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
 def execute_dualTask_number_beep_press(window, results, base_filename, subj_path_rec, stimuli, task_name, werKommt,
                                        fixation, randNumber, item, prompt, feedback, fs, rec_seconds, responseList,
                                        arrows_small, number_prompts, participant_info):
+    """
+    Executes a dual task where the participant listens for a specific beep sound while reading aloud a stimulus.
+
+    The participant is also required to press a button when they hear the beep sound. The task requires the participant
+    to split their attention between reading aloud and listening for a beep. The task records the spoken response
+    of the participant and their reaction to the beep sounds. Results are recorded and written to a CSV file.
+
+    Parameters
+    ----------
+    window: obj
+        The window object where the stimuli are presented.
+    results: list
+        The list that stores the results of the task.
+    base_filename: str
+        The base filename to be used for writing the results to a CSV file.
+    subj_path_rec: str
+        The path where the recordings of the participant's responses are saved.
+    stimuli: DataFrame
+        The dataframe containing the stimuli for the task.
+    task_name: str
+        The name of the task, which can be either 'practice_dualTask_number_beep_press' or 'test_dualTask_number_beep_press'.
+    werKommt: obj
+        The TextStim object used to display the "Wer kommt?" message.
+    fixation: obj
+        The ShapeStim object used for the fixation cross.
+    randNumber: obj
+        The TextStim object used to display random numbers.
+    item: obj
+        The TextStim object used to display the stimuli items.
+    prompt: obj
+        The TextStim object used to display prompts to the participant.
+    feedback: obj
+        The TextStim object used to display feedback to the participant.
+    fs: int
+        The sampling rate for the audio recording.
+    rec_seconds: int
+        The number of seconds to record the participant's response.
+    responseList: list
+        The list of possible responses from the participant.
+    arrows_small: list
+        The list of ArrowStim objects used to display the possible responses.
+    number_prompts: list
+        The list of TextStim objects used to display the number prompts.
+    participant_info: dict
+        A dictionary containing information about the participant, like the subject number.
+
+    Returns
+    -------
+    None
+    """
     # Initialize the keyboard
     keyBoard = keyboard.Keyboard()
     keyBoard.clock.reset()
@@ -756,10 +819,58 @@ def execute_dualTask_number_beep_press(window, results, base_filename, subj_path
         append_result_to_csv(results[-1], base_filename, participant_info)
 
 
-
 def execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_rec, stimuli, task_name, werKommt,
                                      fixation, item, prompt, feedback, fs, rec_seconds, movementDirections,
                                      responseList, dots, arrows, arrows_small, number_prompts, participant_info):
+    """
+    Executes a dual-task experiment where the participant is asked to count beeps and track moving dots.
+    The participant's responses are recorded for analysis.
+
+    Parameters:
+    window : object
+        The window object where all the visual stimuli are drawn.
+    results : list
+        A list to hold the results of the experiment.
+    base_filename : str
+        The base filename for all output files.
+    subj_path_rec : str
+        The path to save the recordings of the participant's responses.
+    stimuli : DataFrame
+        A DataFrame containing the stimuli for the experiment.
+    task_name : str
+        The name of the task to be executed.
+    werKommt : object
+        Text stimulus object for drawing.
+    fixation : object
+        Shape stimulus object for drawing.
+    item : object
+        Text stimulus object for drawing the main task.
+    prompt : object
+        Text stimulus object for drawing instructions.
+    feedback : object
+        Text stimulus object for drawing feedback.
+    fs : int
+        The sampling frequency for recording.
+    rec_seconds : int
+        The duration of recording in seconds.
+    movementDirections : list
+        List of possible movement directions for the dots.
+    responseList : list
+        List of possible responses from the participant.
+    dots : object
+        Dot stimulus object for drawing.
+    arrows : list
+        List of arrow stimulus objects for drawing.
+    arrows_small : list
+        List of small arrow stimulus objects for drawing.
+    number_prompts : list
+        List of number prompt stimulus objects for drawing.
+    participant_info : dict
+        Dictionary containing information about the participant.
+
+    Returns:
+    None
+    """
 
     # List of random numbers, same order for every participant
     if task_name == 'practice_dualTask_beep_count_dots':
@@ -1068,43 +1179,61 @@ def execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_r
 def execute_task(window, task_name, participant_info, stimuli, werKommt, fixation, randNumber, item, prompt,
                  feedback, fs, rec_seconds, movementDirections, responseList, dots, arrows, arrows_small,
                  number_prompts, dual_task=False):
-
     """
-    Orchestrates the execution of the tasks, whether they are dual or single. It prepares the paths for results and
-    recordings of each participant, then calls the appropriate function to execute the task. It also displays an
-    'end of practice' screen once the task is completed.
+    Executes a task for a participant based on the task_name and type (single or dual).
+    It sets up paths for recording and results, checks the task name to call the appropriate
+    task execution function, and displays end-of-practice instructions.
 
-    Args:
-        window (psychopy.visual.Window): The window object where the task will be displayed.
-        task_name (str): The name of the task to be performed.
-        participant_info (dict): A dictionary that contains information about the participant like subject id etc.
-        stimuli (pandas.DataFrame): A DataFrame that contains the stimuli for the task.
-        werKommt (psychopy.visual.TextStim): The TextStim object for "Wer kommt?" question.
-        fixation (psychopy.visual.ShapeStim): The ShapeStim object for fixation cross.
-        randNumber (psychopy.visual.TextStim): The TextStim object for displaying random number.
-        item (psychopy.visual.TextStim): The TextStim object for displaying item.
-        prompt (psychopy.visual.TextStim): The TextStim object for displaying response prompt.
-        feedback (psychopy.visual.TextStim): The TextStim object for displaying feedback.
-        input_text (psychopy.visual.TextStim): The TextStim object for displaying input text.
-        keyList (list): The list of keys allowed for the task.
-        fs (int): The sample rate for recording.
-        rec_seconds (float): The duration of recording in seconds.
-        movementDirections (list): The list of possible directions for the dots to move.
-        responseList (list): The list of corresponding responses for the dot movements.
-        dots (psychopy.visual.DotStim): The DotStim object.
-        operations (list): The list of mathematical operations for dual task.
-        arrows (list): The list of arrow stimulus objects.
-        shapes_list (list): The list of available shapes for the dual task.
-        shape (psychopy.visual.ImageStim): The ImageStim object for displaying shapes in the dual task.
-        flanker_stimuli (list): The list of flanker stimuli for the flanker task.
-        flanker_correct (psychopy.visual.ShapeStim): The ShapeStim object for displaying correct feedback in the flanker task.
-        flanker_incorrect (psychopy.visual.ShapeStim): The ShapeStim object for displaying incorrect feedback in the flanker task.
-        flanker_neutral (psychopy.visual.ShapeStim): The ShapeStim object for displaying neutral feedback in the flanker task.
-        flanker_shape_stimuli (list): The list of flanker shape stimuli for the flanker shape task.
-        dual_task (bool, optional): The flag to denote whether the task to be executed is a dual task or not. Default is False.
+    Parameters:
+    window : object
+        The window object where all the visual stimuli are drawn.
+    task_name : str
+        The name of the task to be executed.
+    participant_info : dict
+        Dictionary containing information about the participant.
+    stimuli : DataFrame
+        A DataFrame containing the stimuli for the experiment.
+    werKommt : object
+        Text stimulus object for drawing.
+    fixation : object
+        Shape stimulus object for drawing.
+    randNumber : object
+        Random number generator object.
+    item : object
+        Text stimulus object for drawing the main task.
+    prompt : object
+        Text stimulus object for drawing instructions.
+    feedback : object
+        Text stimulus object for drawing feedback.
+    fs : int
+        The sampling frequency for recording.
+    rec_seconds : int
+        The duration of recording in seconds.
+    movementDirections : list
+        List of possible movement directions for the dots.
+    responseList : list
+        List of possible responses from the participant.
+    dots : object
+        Dot stimulus object for drawing.
+    arrows : list
+        List of arrow stimulus objects for drawing.
+    arrows_small : list
+        List of small arrow stimulus objects for drawing.
+    number_prompts : list
+        List of number prompt stimulus objects for drawing.
+    dual_task : bool, optional
+        Whether the task to be executed is a dual task or a single task (default is False).
 
     Returns:
-        None
+    None
+
+    Notes:
+    Depending on the task_name and whether the task is a dual task, different tasks are executed.
+    These are: 'practice_dualTask_number_dots', 'test_dualTask_number_dots', 'practice_dualTask_number_beep_press',
+    'test_dualTask_number_beep_press', 'practice_dualTask_beep_count_dots', 'test_dualTask_beep_count_dots', and
+    'practice_singleTask'. For each task, an end-of-practice instruction is displayed. Directories for storing the
+    results and recordings are created if they do not already exist. The results of the task are saved to a
+    results file, and a base filename is generated for the task.
     """
 
     # Initialize an empty list to hold the results
@@ -1204,6 +1333,31 @@ def display_text_and_wait(text_string, window):
 
 
 def select_and_replace_number(task_name, replacement_number):
+    """
+    Selects a set of unique numbers within a given range, and replaces one of these numbers
+    with a specified replacement number. The range of numbers and the position of the replacement
+    number are determined randomly.
+
+    Parameters:
+    task_name : str
+        The name of the task, which determines the range of numbers to be selected. If the task
+        is 'practice_dualTask_beep_count_dots' or 'test_dualTask_beep_count_dots', the range is from
+        3 to 23, otherwise the range is from 100 to 999.
+    replacement_number : int
+        The number that will replace one of the randomly selected numbers in the final list.
+
+    Returns:
+    numbers : list of int
+        List of four numbers where one of the numbers is the replacement_number.
+    replace_index : int
+        The index at which the replacement_number is placed in the list.
+
+    Notes:
+    This function is used to create a list of four numbers that includes a certain number
+    (the replacement number). The other three numbers are selected randomly from a range
+    that depends on the task_name. The replacement number's position in the list is also chosen randomly.
+    """
+
     if task_name == 'practice_dualTask_beep_count_dots' or task_name == 'test_dualTask_beep_count_dots':
         range_start = 3
         range_end = 23

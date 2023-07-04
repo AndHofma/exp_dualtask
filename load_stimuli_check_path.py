@@ -38,12 +38,39 @@ def check_config_paths(stim_path, output_path, pics_path, record_path, shapes_pa
 
 def load_and_randomize(stim_path, task):
     """
-    Load stimuli data from an Excel file, randomize the coordinates without consecutive repetitions,
-    and return a list containing practice and randomized coordinates data.
+    Loads stimulus data from an Excel file, separates it into practice and coordinates data,
+    randomizes the coordinates data, and returns the combined data.
+
+    The function repeatedly shuffles the rows of the coordinates data until it achieves a
+    randomization where neither the 'condition' nor the 'name1' field have the same values
+    in three consecutive rows.
+
+    Parameters:
+    stim_path : str
+        The path to the directory containing the 'conditions.xlsx' file. This file
+        should contain stimulus data to be randomized.
+    task : str
+        A string indicating the type of task. The task type doesn't affect the randomization
+        but it is used to log the operation in case of errors.
 
     Returns:
-        stimulus_type (list): A list containing two dataframes - practice data and randomized coordinates data.
+    stimulus_type : list
+        A list of two pandas.DataFrame objects. The first one contains the practice data
+        and the second one contains the randomized coordinates data.
+
+    Raises:
+    IOError:
+        If there is an error opening the 'conditions.xlsx' file, an IOError is raised with a
+        detailed error message.
+    KeyError:
+        If there is an error reading the 'conditions.xlsx' file because it does not contain
+        the expected columns, a KeyError is raised with a detailed error message.
+
+    Note:
+    This function relies on pandas for reading Excel data and handling dataframes. It also
+    utilizes the logging module for logging errors.
     """
+
     try:
         # save all data from all cols and rows in dataframe
         stimuli = pandas.read_excel(stim_path + 'conditions.xlsx')
