@@ -109,7 +109,7 @@ display_text_and_wait(instructDualTask_number_dots_1, window)
 if display_text_and_wait(instructDualTask_number_dots_2, window):
     display_text_and_wait(instructPracticeDualTask_number_dots_Start, window)
 
-# Running the dual task practice session
+# Running the dual task - number and dots - practice session
 # practice items = stimuli_dual_number_dots[0]
 execute_task(window=window,
              task_name='practice_dualTask_number_dots',
@@ -132,7 +132,7 @@ execute_task(window=window,
              dual_task=True
              )
 
-# Running the dual task test session
+# Running the dual task - number and dots - test session
 # randomized coordinates = stimuli_dual_number_dots[1]
 execute_task(window=window,
              task_name='test_dualTask_number_dots',
@@ -159,7 +159,7 @@ execute_task(window=window,
 if display_text_and_wait(instructDualTask_number_beep_press_1, window):
     display_text_and_wait(instructDualTask_number_beep_press_2, window)
 
-# Running the dual task practice session
+# Running the dual task - number and beep press - practice session
 # practice items = stimuli_dual_number_beep_press[0]
 execute_task(window=window,
              task_name='practice_dualTask_number_beep_press',
@@ -182,7 +182,7 @@ execute_task(window=window,
              dual_task=True
              )
 
-# Running the dual task 2-back test session
+# Running the dual task - number and beep press - test session
 # randomized coordinates = stimuli_dual_number_beep_press[1]
 execute_task(window=window,
              task_name='test_dualTask_number_beep_press',
@@ -209,7 +209,7 @@ execute_task(window=window,
 if display_text_and_wait(instructDualTask_beep_count_dots_1, window):
     display_text_and_wait(instructDualTask_beep_count_dots_2, window)
 
-# Running the dual task practice session
+# Running the dual task - beep count and dots - practice session
 # practice items = stimuli_dual_beep_count_dots[0]
 execute_task(window=window,
              task_name='practice_dualTask_beep_count_dots',
@@ -232,7 +232,7 @@ execute_task(window=window,
              dual_task=True
              )
 
-# Running the dual task 2-back test session
+# Running the dual task - beep count and dots - test session
 # randomized coordinates = stimuli_dual_beep_count_dots[1]
 execute_task(window=window,
              task_name='test_dualTask_beep_count_dots',
