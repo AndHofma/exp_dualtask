@@ -36,17 +36,17 @@ print(f'stimuli_single: {stimuli_dual_beep_count_dots}')"""
 
 
 # this is just for debugging and piloting
-stimuli_single[0] = stimuli_single[0][:6]
-stimuli_single[1] = stimuli_single[1][:20]
+stimuli_single[0] = stimuli_single[0][:2]
+stimuli_single[1] = stimuli_single[1][:3]
 
-stimuli_dual_number_dots[0] = stimuli_dual_number_dots[0][:6]
-stimuli_dual_number_dots[1] = stimuli_dual_number_dots[1][:20]
+stimuli_dual_number_dots[0] = stimuli_dual_number_dots[0][:2]
+stimuli_dual_number_dots[1] = stimuli_dual_number_dots[1][:3]
 
-stimuli_dual_number_beep_press[0] = stimuli_dual_number_beep_press[0][:6]
-stimuli_dual_number_beep_press[1] = stimuli_dual_number_beep_press[1][:20]
+stimuli_dual_number_beep_press[0] = stimuli_dual_number_beep_press[0][:2]
+stimuli_dual_number_beep_press[1] = stimuli_dual_number_beep_press[1][:3]
 
-stimuli_dual_beep_count_dots[0] = stimuli_dual_beep_count_dots[0][:6]
-stimuli_dual_beep_count_dots[1] = stimuli_dual_beep_count_dots[1][:20]
+stimuli_dual_beep_count_dots[0] = stimuli_dual_beep_count_dots[0][:2]
+stimuli_dual_beep_count_dots[1] = stimuli_dual_beep_count_dots[1][:3]
 
 # Get participant information
 participant_info = get_participant_info()

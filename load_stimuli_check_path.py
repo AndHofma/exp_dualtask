@@ -8,7 +8,7 @@ import pandas
 import logging
 
 
-def check_config_paths(stim_path, output_path, pics_path, record_path, shapes_path):
+def check_config_paths(stim_path, output_path, pics_path, record_path):
     """
         Function checks the existence of specific directories and raises
         exceptions with appropriate error messages if any of the directories are not found.
@@ -23,11 +23,6 @@ def check_config_paths(stim_path, output_path, pics_path, record_path, shapes_pa
         # Raise exception if not
         raise Exception("No pics folder detected. Please make sure that "
                         "'pics_path' is correctly set in the configurations")
-    # Check if the shapes directory exists
-    if not os.path.exists(shapes_path):
-        # Raise exception if not
-        raise Exception("No shapes folder detected. Please make sure that "
-                        "'shapes_path' is correctly set in the configurations")
     # Check if the output directory exists, if not, create it
     if not os.path.exists(output_path):
         os.mkdir(output_path)
