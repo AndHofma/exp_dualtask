@@ -7,21 +7,26 @@ These are all text stimuli for the single task and dual task instructions.
 
 # instructions and intro single task first screen
 instructSingleTask1 = """
-Willkommen zum Produktions-Experiment! \n
-Dies ist der erste von zwei Teilen des Experimentes.
-Auf dem Bildschirm sehen Sie gleich immer drei Namen, 
-manchmal mit, manchmal ohne Klammern. 
-Stellen Sie sich Folgendes dazu vor: 
-Drei Namen ohne Klammern: "Lotte und Laura und Lisa" - 
-alle drei Personen kommen gemeinsam zu einer Party. 
-Klammern um die ersten beiden Namen: "(Lotte und Laura) und Lisa" - 
-zwei Personen kommen gemeinsam, die dritte Person kommt allein. \n 
+Willkommen zum ersten Teil des Produktions-Experiment! \n
+
+Auf dem Bildschirm sehen Sie gleich unterschiedliche Kombinationen 
+von jeweils drei Namen, die Sie laut vorlesen sollen. 
+Die Namen werden entweder ohne Klammer (a) 
+oder mit Klammer (b) präsentiert:
+a) Lotte und Laura und Lisa
+b) (Lotte und Laura) und Lisa 
+Die Klammern geben an, welche der Personen gemeinsam kommen. 
+Gibt es keine Klammern wie in (a), kommen alle drei gemeinsam. 
+Gibt es Klammern wie in (b), kommen Lotte und Laura gemeinsam 
+und Nora kommt auch, aber nicht zusammen mit Lotte und Laura. 
+Ihre Aufgabe ist es, die Namen so zu sagen, dass man möglichst 
+gut verstehen kann, welche Personen gemeinsam kommen.  \n 
 Drücken Sie die Eingabetaste (Enter), um zur nächsten Seite zu kommen.
 """
 
 # instructions and intro single task second screen
 instructSingleTask2 = """
-Bevor die Namenssequenz erscheint, sehen Sie immer die Frage: 
+Bevor die Namen erscheinen, sehen Sie immer die Frage: 
 Wer kommt? 
 Antworten Sie auf die Frage, indem Sie die Namenssequenz laut vorlesen. 
 Achten Sie darauf, dass man so genau wie möglich versteht, 

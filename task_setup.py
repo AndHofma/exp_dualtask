@@ -76,8 +76,8 @@ def execute_singleTask(window, results, subj_path_rec, stimuli, task_name, werKo
         # Start recording the participant's verbal response
         responseRecord = sd.rec(int(rec_seconds * fs), samplerate=fs, channels=1)
 
-        # Present item and pic for 300 frames
-        for frame in range(300):
+        # Present item and pic for 350 frames
+        for frame in range(350):
             item.draw()  # Draw item
             window.flip()  # Flip window to make drawn items visible
 
