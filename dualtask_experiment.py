@@ -36,7 +36,7 @@ print(f'stimuli_single: {stimuli_dual_beep_count_dots}')"""
 
 
 # this is just for debugging and piloting
-stimuli_single[0] = stimuli_single[0][:2]
+"""stimuli_single[0] = stimuli_single[0][:2]
 stimuli_single[1] = stimuli_single[1][:3]
 
 stimuli_dual_number_dots[0] = stimuli_dual_number_dots[0][:3]
@@ -46,7 +46,7 @@ stimuli_dual_number_beep_press[0] = stimuli_dual_number_beep_press[0][:3]
 stimuli_dual_number_beep_press[1] = stimuli_dual_number_beep_press[1][:20]
 
 stimuli_dual_beep_count_dots[0] = stimuli_dual_beep_count_dots[0][:3]
-stimuli_dual_beep_count_dots[1] = stimuli_dual_beep_count_dots[1][:20]
+stimuli_dual_beep_count_dots[1] = stimuli_dual_beep_count_dots[1][:20]"""
 
 # Get participant information
 participant_info = get_participant_info()
@@ -63,7 +63,7 @@ if display_text_and_wait(instructSingleTask2, window):
 # Running the single task practice session
 # practice items = stimuli_single[0]
 execute_task(window=window,
-             task_name='practice_singleTask',
+             task_name='practice_single',
              participant_info=participant_info,
              stimuli=stimuli_single[0],
              werKommt=werKommt,
@@ -85,7 +85,7 @@ execute_task(window=window,
 # Running the single task test session
 # test items = stimuli_single[1]
 execute_task(window=window,
-             task_name='test_singleTask',
+             task_name='test_single',
              participant_info=participant_info,
              stimuli=stimuli_single[1],
              werKommt=werKommt,
@@ -112,7 +112,7 @@ if display_text_and_wait(instructDualTask_number_dots_2, window):
 # Running the dual task - number and dots - practice session
 # practice items = stimuli_dual_number_dots[0]
 execute_task(window=window,
-             task_name='practice_dualTask_number_dots',
+             task_name='practice_number_dots',
              participant_info=participant_info,
              stimuli=stimuli_dual_number_dots[0],
              werKommt=werKommt,
@@ -135,7 +135,7 @@ execute_task(window=window,
 # Running the dual task - number and dots - test session
 # randomized coordinates = stimuli_dual_number_dots[1]
 execute_task(window=window,
-             task_name='test_dualTask_number_dots',
+             task_name='test_number_dots',
              participant_info=participant_info,
              stimuli=stimuli_dual_number_dots[1],
              werKommt=werKommt,
@@ -162,7 +162,7 @@ if display_text_and_wait(instructDualTask_number_beep_press_1, window):
 # Running the dual task - number and beep press - practice session
 # practice items = stimuli_dual_number_beep_press[0]
 execute_task(window=window,
-             task_name='practice_dualTask_number_beep_press',
+             task_name='practice_number_beep_press',
              participant_info=participant_info,
              stimuli=stimuli_dual_number_beep_press[0],
              werKommt=werKommt,
@@ -185,7 +185,7 @@ execute_task(window=window,
 # Running the dual task - number and beep press - test session
 # randomized coordinates = stimuli_dual_number_beep_press[1]
 execute_task(window=window,
-             task_name='test_dualTask_number_beep_press',
+             task_name='test_number_beep_press',
              participant_info=participant_info,
              stimuli=stimuli_dual_number_beep_press[1],
              werKommt=werKommt,
@@ -212,7 +212,7 @@ if display_text_and_wait(instructDualTask_beep_count_dots_1, window):
 # Running the dual task - beep count and dots - practice session
 # practice items = stimuli_dual_beep_count_dots[0]
 execute_task(window=window,
-             task_name='practice_dualTask_beep_count_dots',
+             task_name='practice_beep_count_dots',
              participant_info=participant_info,
              stimuli=stimuli_dual_beep_count_dots[0],
              werKommt=werKommt,
@@ -235,7 +235,7 @@ execute_task(window=window,
 # Running the dual task - beep count and dots - test session
 # randomized coordinates = stimuli_dual_beep_count_dots[1]
 execute_task(window=window,
-             task_name='test_dualTask_beep_count_dots',
+             task_name='test_beep_count_dots',
              participant_info=participant_info,
              stimuli=stimuli_dual_beep_count_dots[1],
              werKommt=werKommt,

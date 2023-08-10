@@ -85,9 +85,11 @@ def execute_singleTask(window, results, subj_path_rec, stimuli, task_name, werKo
         sd.stop()
 
         # Save the recording as a WAV file
-        write(os.path.join(subj_path_rec, 'single_task_' + participant_info['subject'] + '_' + task_name + '_' + str(stimuli.loc[x]['ID']) + '.wav'), fs, responseRecord)
+        write(os.path.join(subj_path_rec, 'dualtask_' + participant_info['subject'] + '_' + task_name + '_' +
+                           "{:02d}".format(x + 1) + '_' + str(stimuli.loc[x]['ID']) + '.wav'), fs, responseRecord)
         # naming the recording wav file to find it in the log-file
-        responseRecordName = 'single_task_' + participant_info['subject'] + '_' + task_name + '_' + str(stimuli.loc[x]['ID']) + '.wav'
+        responseRecordName = 'dualtask_' + participant_info['subject'] + '_' + task_name + '_' + \
+                             "{:02d}".format(x + 1) + '_' + str(stimuli.loc[x]['ID']) + '.wav'
 
         # Calculate and format end time and duration
         end_time = time.time()
@@ -100,7 +102,7 @@ def execute_singleTask(window, results, subj_path_rec, stimuli, task_name, werKo
         # Prepare the result dictionary
         results.append({
             'task': task,
-            'main_trial': str(x+1),
+            'main_trial': "{:02d}".format(x + 1),
             'phase': 'practice' if task_name.startswith('practice') else 'test',
             'stimulus_id': stimuli.loc[x]['ID'],
             'stimulus': stimuli.loc[x]['item'],
@@ -153,7 +155,7 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
         base_filename (str): The base name of the CSV file to save results.
         subj_path_rec (str): The path to the directory to save the recorded responses.
         stimuli (pd.DataFrame): The dataframe containing stimuli data.
-        task_name (str): The name of the task ('practice_dualTask_number_dots' or 'test_dualTask_number_dots').
+        task_name (str): The name of the task ('practice_number_dots' or 'test_number_dots').
         werKommt (VisualStim): Visual stimulus object for displaying a cue.
         fixation (ShapeStim): The fixation point.
         randNumber (TextStim): The random number to display.
@@ -178,9 +180,9 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
     """
 
     # Setting up random seed for reproducibility based on the task type
-    if task_name == 'practice_dualTask_number_dots':
+    if task_name == 'practice_number_dots':
         random.seed(42)  # Seed for practice trials
-    elif task_name == 'test_dualTask_number_dots':
+    elif task_name == 'test_number_dots':
         random.seed(666)  # Seed for test trials
     # Generating list of random numbers for each trial
     randNr = [random.randint(100, 999) for _ in range(len(stimuli))]
@@ -234,8 +236,10 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
             window.flip()
         sd.stop()  # stop the recording
         # Saving the response recording as a wav file
-        responseRecordName = 'dual_task_' + participant_info['subject'] + '_' + task_name + '_' + str(stimuli.loc[x]['ID']) + '.wav'
-        write(os.path.join(subj_path_rec, 'dual_task_' + participant_info['subject'] + '_' + task_name + '_' + str(stimuli.loc[x]['ID']) + '.wav'), fs, responseRecord)
+        responseRecordName = 'dualtask_' + participant_info['subject'] + '_' + task_name + '_' + \
+                             "{:02d}".format(x + 1) + '_' + str(stimuli.loc[x]['ID']) + '.wav'
+        write(os.path.join(subj_path_rec, 'dualtask_' + participant_info['subject'] + '_' + task_name + '_' +
+                           "{:02d}".format(x + 1) + '_' + str(stimuli.loc[x]['ID']) + '.wav'), fs, responseRecord)
         # Displaying first response screen and collecting the response
         prompt.setText('In welche Richtung haben sich die meisten Punkte bewegt?\n Drücken Sie den entsprechenden Pfeil auf der Tastatur.')
         prompt.pos = (0, -0.6)
@@ -295,7 +299,7 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
         # Prepare the result dictionary
         results.append({
             'task': task,
-            'main_trial': str(x+1),
+            'main_trial': "{:02d}".format(x + 1),
             'phase': 'practice' if task_name.startswith('practice') else 'test',
             'stimulus_id': stimuli.loc[x]['ID'],
             'stimulus': stimuli.loc[x]['item'],
@@ -355,7 +359,7 @@ def execute_dualTask_number_beep_press(window, results, base_filename, subj_path
     stimuli: DataFrame
         The dataframe containing the stimuli for the task.
     task_name: str
-        The name of the task, which can be either 'practice_dualTask_number_beep_press' or 'test_dualTask_number_beep_press'.
+        The name of the task, which can be either 'practice_number_beep_press' or 'test_number_beep_press'.
     werKommt: obj
         The TextStim object used to display the "Wer kommt?" message.
     fixation: obj
@@ -390,9 +394,9 @@ def execute_dualTask_number_beep_press(window, results, base_filename, subj_path
     keyBoard.clock.reset()
 
     # List of random numbers, same order for every participant
-    if task_name == 'practice_dualTask_number_beep_press':
+    if task_name == 'practice_number_beep_press':
         random.seed(242)  # Set a random seed for reproducibility - here to get same list of nrs for practice
-    elif task_name == 'test_dualTask_number_beep_press':
+    elif task_name == 'test_number_beep_press':
         random.seed(7666)  # Set a random seed for reproducibility - here to get same list of nrs for test
 
     randNr = [random.randint(100, 999) for _ in range(len(stimuli))]
@@ -505,7 +509,7 @@ def execute_dualTask_number_beep_press(window, results, base_filename, subj_path
                     beep_press_results.append({
                         'task': task_name,
                         'phase': 'practice' if task_name.startswith('practice') else 'test',
-                        'main_trial': x + 1,
+                        'main_trial': "{:02d}".format(x + 1),
                         'beep_press_trial': beep_counter,
                         'beep_press_stimulus': beep_type,
                         'beep_press_rt': 'NA',
@@ -533,7 +537,7 @@ def execute_dualTask_number_beep_press(window, results, base_filename, subj_path
                         beep_press_results.append({
                             'task': task_name,
                             'phase': 'practice' if task_name.startswith('practice') else 'test',
-                            'main_trial': x + 1,
+                            'main_trial': "{:02d}".format(x + 1),
                             'beep_press_trial': 'pause for ' + str(end_offset-start_offset) + 'frames',
                             'beep_press_stimulus': 'none',
                             'beep_press_rt': 'NA',
@@ -559,8 +563,9 @@ def execute_dualTask_number_beep_press(window, results, base_filename, subj_path
                     sd.stop()
                     # Save the spoken response as a .wav file
                     write(os.path.join(subj_path_rec,
-                                       'dual_task_' + participant_info['subject'] + '_' + task_name + '_' + str(
-                                           stimuli.loc[x]['ID']) + '.wav'), fs, responseRecord)
+                                       'dualtask_' + participant_info['subject'] + '_' + task_name + '_' +
+                                       "{:02d}".format(x + 1) + '_' + str(stimuli.loc[x]['ID']) + '.wav'),
+                          fs, responseRecord)
 
             if frame > 50 and frame < 1200:
                 keys = keyBoard.getKeys(keyList=['space'], waitRelease=True)  # Check if the participant pressed 'space'
@@ -718,8 +723,8 @@ def execute_dualTask_number_beep_press(window, results, base_filename, subj_path
         core.wait(2)
 
         # Define a file name for the response record
-        responseRecordName = 'dual_task_' + participant_info['subject'] + '_' + task_name + '_' + str(
-            stimuli.loc[x]['ID']) + '.wav'
+        responseRecordName = 'dualtask_' + participant_info['subject'] + '_' + task_name + '_' + \
+                             "{:02d}".format(x + 1) + '_' + str(stimuli.loc[x]['ID']) + '.wav'
 
         # Record end time and duration
         end_time = time.time()
@@ -782,7 +787,7 @@ def execute_dualTask_number_beep_press(window, results, base_filename, subj_path
         # Prepare the result dictionary
         results.append({
             'task': task,
-            'main_trial': str(x + 1),
+            'main_trial': "{:02d}".format(x + 1),
             'phase': 'practice' if task_name.startswith('practice') else 'test',
             'stimulus_id': stimuli.loc[x]['ID'],
             'stimulus': stimuli.loc[x]['item'],
@@ -873,9 +878,9 @@ def execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_r
     """
 
     # List of random numbers, same order for every participant
-    if task_name == 'practice_dualTask_beep_count_dots':
+    if task_name == 'practice_beep_count_dots':
         random.seed(424)  # Set a random seed for reproducibility - here to get same list of nrs for practice
-    elif task_name == 'test_dualTask_beep_count_dots':
+    elif task_name == 'test_beep_count_dots':
         random.seed(6667)  # Set a random seed for reproducibility - here to get same list of nrs for test
 
     # Initialize start time and start_time_str
@@ -977,7 +982,7 @@ def execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_r
                     beep_count_results.append({
                         'task': task_name,
                         'phase':'practice' if task_name.startswith('practice') else 'test',
-                        'main_trial': x+1,
+                        'main_trial': "{:02d}".format(x + 1),
                         'beep_count_trial': beep_counter,
                         'beep_count_stimulus': beep_type,
                         'presentation': 'dual' if start_offset <= frame < end_offset else 'single',
@@ -1002,7 +1007,7 @@ def execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_r
                         beep_count_results.append({
                         'task': task_name,
                         'phase':'practice' if task_name.startswith('practice') else 'test',
-                        'main_trial': x+1,
+                        'main_trial': "{:02d}".format(x + 1),
                         'beep_count_trial': 'pause for ' + str(end_offset-start_offset) + 'frames',
                         'beep_count_stimulus': 'none',
                         'presentation': 'name_coordinate and dots',
@@ -1025,8 +1030,9 @@ def execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_r
                     sd.stop()
                     # Save the spoken response as a .wav file
                     write(os.path.join(subj_path_rec,
-                                       'dual_task_' + participant_info['subject'] + '_' + task_name + '_' + str(
-                                           stimuli.loc[x]['ID']) + '.wav'), fs, responseRecord)
+                                       'dualtask_' + participant_info['subject'] + '_' + task_name + '_' +
+                                       "{:02d}".format(x + 1) + '_' + str(stimuli.loc[x]['ID']) + '.wav'),
+                          fs, responseRecord)
 
             if rand1stFrame <= frame < randLastFrame:  # Present dots for subset of frames
                 dots.dir = movement
@@ -1104,8 +1110,8 @@ def execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_r
         core.wait(2)
 
         # Define a file name for the response record
-        responseRecordName = 'dual_task_' + participant_info['subject'] + '_' + task_name + '_' + str(
-            stimuli.loc[x]['ID']) + '.wav'
+        responseRecordName = 'dualtask_' + participant_info['subject'] + '_' + task_name + '_' + \
+                             "{:02d}".format(x + 1) + '_' + str(stimuli.loc[x]['ID']) + '.wav'
 
         # Record end time and duration
         end_time = time.time()
@@ -1138,7 +1144,7 @@ def execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_r
         # Prepare the result dictionary
         results.append({
             'task': task,
-            'main_trial': str(x + 1),
+            'main_trial': "{:02d}".format(x + 1),
             'phase': 'practice' if task_name.startswith('practice') else 'test',
             'stimulus_id': stimuli.loc[x]['ID'],
             'stimulus': stimuli.loc[x]['item'],
@@ -1229,9 +1235,9 @@ def execute_task(window, task_name, participant_info, stimuli, werKommt, fixatio
 
     Notes:
     Depending on the task_name and whether the task is a dual task, different tasks are executed.
-    These are: 'practice_dualTask_number_dots', 'test_dualTask_number_dots', 'practice_dualTask_number_beep_press',
-    'test_dualTask_number_beep_press', 'practice_dualTask_beep_count_dots', 'test_dualTask_beep_count_dots', and
-    'practice_singleTask'. For each task, an end-of-practice instruction is displayed. Directories for storing the
+    These are: 'practice_number_dots', 'test_number_dots', 'practice_number_beep_press',
+    'test_number_beep_press', 'practice_beep_count_dots', 'test_beep_count_dots', and
+    'practice_single'. For each task, an end-of-practice instruction is displayed. Directories for storing the
     results and recordings are created if they do not already exist. The results of the task are saved to a
     results file, and a base filename is generated for the task.
     """
@@ -1260,39 +1266,39 @@ def execute_task(window, task_name, participant_info, stimuli, werKommt, fixatio
 
     # Execute the task and save the result
     if dual_task:
-        if task_name == 'practice_dualTask_number_dots':
+        if task_name == 'practice_number_dots':
             execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, stimuli, task_name, werKommt,
                                          fixation, randNumber, item, prompt, feedback, fs, rec_seconds, movementDirections,
                                          responseList, dots, arrows, arrows_small, number_prompts, participant_info)
             display_text_and_wait(instructPracticeDualTask_number_dots_End, window)
-        if task_name == 'test_dualTask_number_dots':
+        if task_name == 'test_number_dots':
             execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, stimuli, task_name, werKommt,
                                          fixation, randNumber, item, prompt, feedback, fs, rec_seconds, movementDirections,
                                          responseList, dots, arrows, arrows_small, number_prompts, participant_info)
 
-        if task_name == 'practice_dualTask_number_beep_press':
+        if task_name == 'practice_number_beep_press':
             execute_dualTask_number_beep_press(window, results, base_filename, subj_path_rec, stimuli, task_name,
                                                werKommt, fixation, randNumber, item, prompt, feedback, fs, rec_seconds,
                                                responseList, arrows_small, number_prompts, participant_info)
             display_text_and_wait(instructPracticeDualTask_number_beep_press_End, window)
-        if task_name == 'test_dualTask_number_beep_press':
+        if task_name == 'test_number_beep_press':
             execute_dualTask_number_beep_press(window, results, base_filename, subj_path_rec, stimuli, task_name,
                                                werKommt, fixation, randNumber, item, prompt, feedback, fs, rec_seconds,
                                                responseList, arrows_small, number_prompts, participant_info)
 
-        if task_name == 'practice_dualTask_beep_count_dots':
+        if task_name == 'practice_beep_count_dots':
             execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_rec, stimuli, task_name, werKommt,
                                              fixation, item, prompt, feedback, fs, rec_seconds, movementDirections,
                                              responseList, dots, arrows, arrows_small, number_prompts, participant_info)
             display_text_and_wait(instructPracticeDualTask_beep_count_dots_End, window)
-        if task_name == 'test_dualTask_beep_count_dots':
+        if task_name == 'test_beep_count_dots':
             execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_rec, stimuli, task_name, werKommt,
                                              fixation, item, prompt, feedback, fs, rec_seconds, movementDirections,
                                              responseList, dots, arrows, arrows_small, number_prompts, participant_info)
     else:
         execute_singleTask(window, results, subj_path_rec, stimuli, task_name, werKommt, fixation, item, rec_seconds,
                            fs, participant_info, base_filename)
-        if task_name == 'practice_singleTask':
+        if task_name == 'practice_single':
             display_text_and_wait(instructPracticeSingleTaskEnd, window)
 
 
@@ -1341,7 +1347,7 @@ def select_and_replace_number(task_name, replacement_number):
     Parameters:
     task_name : str
         The name of the task, which determines the range of numbers to be selected. If the task
-        is 'practice_dualTask_beep_count_dots' or 'test_dualTask_beep_count_dots', the range is from
+        is 'practice_beep_count_dots' or 'test_beep_count_dots', the range is from
         3 to 23, otherwise the range is from 100 to 999.
     replacement_number : int
         The number that will replace one of the randomly selected numbers in the final list.
@@ -1358,7 +1364,7 @@ def select_and_replace_number(task_name, replacement_number):
     that depends on the task_name. The replacement number's position in the list is also chosen randomly.
     """
 
-    if task_name == 'practice_dualTask_beep_count_dots' or task_name == 'test_dualTask_beep_count_dots':
+    if task_name == 'practice_beep_count_dots' or task_name == 'test_beep_count_dots':
         range_start = 3
         range_end = 23
     else:

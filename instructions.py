@@ -7,12 +7,10 @@ These are all text stimuli for the single task and dual task instructions.
 
 # instructions and intro single task first screen
 instructSingleTask1 = """
-Willkommen zum ersten Teil des Produktions-Experiment! \n
-
+Willkommen zum ersten Teil des Produktions-Experiments! \n
 Auf dem Bildschirm sehen Sie gleich unterschiedliche Kombinationen 
 von jeweils drei Namen, die Sie laut vorlesen sollen. 
-Die Namen werden entweder ohne Klammer (a) 
-oder mit Klammer (b) präsentiert:
+Die Namen werden entweder ohne (a) oder mit Klammer (b) präsentiert:
 a) Lotte und Laura und Lisa
 b) (Lotte und Laura) und Lisa 
 Die Klammern geben an, welche der Personen gemeinsam kommen. 
@@ -28,6 +26,7 @@ Drücken Sie die Eingabetaste (Enter), um zur nächsten Seite zu kommen.
 instructSingleTask2 = """
 Bevor die Namen erscheinen, sehen Sie immer die Frage: 
 Wer kommt? 
+
 Antworten Sie auf die Frage, indem Sie die Namenssequenz laut vorlesen. 
 Achten Sie darauf, dass man so genau wie möglich versteht, 
 wer gemeinsam kommt. 
@@ -53,8 +52,8 @@ Drücken Sie die Eingabetaste (Enter), um mit den Übungsbeispielen zu beginnen.
 instructPracticeSingleTaskEnd = """
 Das waren die Übungsbeispiele. \n
 Falls Sie noch Fragen haben, geben Sie bitte der Versuchsleiterin Bescheid. 
-Der erste Teil dauert ca. 8 Minuten. 
-Sie sehen 60 verschiedene Namenssequenzen.
+Der erste Teil dauert ca. 5 Minuten. 
+Sie sehen 24 verschiedene Namenssequenzen.
 Danach können Sie eine Pause machen, wenn Sie das wünschen. \n
 Drücken Sie die Eingabetaste (Enter), um mit dem Experiment zu starten.
 """
@@ -100,7 +99,7 @@ Drücken Sie die Eingabetaste (Enter), um mit den Übungsbeispielen zu beginnen.
 instructPracticeDualTask_number_dots_End = """
 Das waren die Übungsbeispiele. \n
 Falls Sie noch Fragen haben, geben Sie bitte der Versuchsleiterin Bescheid.
-Dieser Teil dauert ca. 12 Minuten - Sie sehen wieder 60 verschiedene Namenssequenzen. \n
+Dieser Teil dauert ca. 8 Minuten - Sie sehen wieder 24 verschiedene Namenssequenzen. \n
 Drücken Sie die Eingabetaste (Enter), um mit dem Experiment zu starten.
 """
 
@@ -142,7 +141,7 @@ Drücken Sie die Eingabetaste (Enter), um mit den Übungsbeispielen zu beginnen.
 instructPracticeDualTask_number_beep_press_End = """
 Das waren die Übungsbeispiele. \n
 Falls Sie noch Fragen haben, geben Sie bitte der Versuchsleiterin Bescheid.
-Dieser Teil dauert ca. 18 Minuten - Sie sehen wieder 60 verschiedene Namenssequenzen. \n
+Dieser Teil dauert ca. 10 Minuten - Sie sehen wieder 24 verschiedene Namenssequenzen. \n
 Drücken Sie die Eingabetaste (Enter), um mit dem Experiment zu starten.
 """
 
@@ -184,6 +183,6 @@ Drücken Sie die Eingabetaste (Enter), um mit den Übungsbeispielen zu beginnen.
 instructPracticeDualTask_beep_count_dots_End = """
 Das waren die Übungsbeispiele. \n
 Falls Sie noch Fragen haben, geben Sie bitte der Versuchsleiterin Bescheid.
-Dieser Teil dauert ca. 18 Minuten - Sie sehen wieder 60 verschiedene Namenssequenzen. \n
+Dieser Teil dauert ca. 10 Minuten - Sie sehen wieder 24 verschiedene Namenssequenzen. \n
 Drücken Sie die Eingabetaste (Enter), um mit dem Experiment zu starten.
 """
