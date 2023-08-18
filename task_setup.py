@@ -197,7 +197,7 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
         rand1stFrame = random.randint(40, 70)
         randLastFrame = random.randint(190, 220)
         # Select and replace a number in the selection
-        number_selection, correct_index = select_and_replace_number(task_name, randNr[x])
+        number_selection, correct_index = select_and_replace_number(randNr[x])
         # Setting up number_prompts with numbers from number_selection
         for i in range(len(number_selection)):
             number_prompts[i].text = str(number_selection[i])  # set each prompt with corresponding number
@@ -255,12 +255,12 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
         if responseList.index(arrowKey[0]) == movementDirections.index(movement):
             dot_accuracy = 'correct'
             feedback.setText('Korrekt!')
-            feedback.setColor('green')
+            feedback.setColor('black')
             feedback.draw()
         else:
             dot_accuracy = 'incorrect'
             feedback.setText('Inkorrekt!')
-            feedback.setColor('red')
+            feedback.setColor('black')
             feedback.draw()
         window.flip()
         core.wait(2)
@@ -280,12 +280,12 @@ def execute_dualTask_number_dots(window, results, base_filename, subj_path_rec, 
         if responseList.index(arrowKey_number[0]) == correct_index:
             numbers_accuracy = 'correct'
             feedback.setText('Korrekt!')
-            feedback.setColor('green')
+            feedback.setColor('black')
             feedback.draw()
         else:
             numbers_accuracy = 'incorrect'
             feedback.setText('Inkorrekt!')
-            feedback.setColor('red')
+            feedback.setColor('black')
             feedback.draw()
         window.flip()
         core.wait(2)
@@ -416,7 +416,7 @@ def execute_dualTask_number_beep_press(window, results, base_filename, subj_path
         start_offset = random.randint(300, 601)  # random number between 300 and 600
         end_offset = start_offset + 350
 
-        number_selection, correct_index = select_and_replace_number(task_name,randNr[x])
+        number_selection, correct_index = select_and_replace_number(randNr[x])
 
         # naming the TextStim to find it in the log-file
         randNumber.setText(randNr[x])
@@ -711,12 +711,12 @@ def execute_dualTask_number_beep_press(window, results, base_filename, subj_path
         if responseList.index(arrowKey_number[0]) == correct_index:
             numbers_accuracy = 'correct'
             feedback.setText('Korrekt!')
-            feedback.setColor('green')
+            feedback.setColor('black')
             feedback.draw()
         else:
             numbers_accuracy = 'incorrect'
             feedback.setText('Inkorrekt!')
-            feedback.setColor('red')
+            feedback.setColor('black')
             feedback.draw()
         window.flip()
 
@@ -1065,18 +1065,18 @@ def execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_r
         if responseList.index(arrowKey[0]) == movementDirections.index(movement):
             dot_Accuracy = 'correct'
             feedback.setText('Korrekt!')
-            feedback.setColor('green')
+            feedback.setColor('black')
             feedback.draw()
         else:
             dot_Accuracy = 'incorrect'
             feedback.setText('Inkorrekt!')
-            feedback.setColor('red')
+            feedback.setColor('black')
             feedback.draw()
         window.flip()
 
         core.wait(2)
 
-        number_selection, correct_index = select_and_replace_number(task_name, beep_sequence.count('deviant'))
+        number_selection, correct_index = select_and_replace_number(beep_sequence.count('deviant'))
 
         # now number_prompts have been created and are of the same length as number_selection
         for i, arrow in zip(range(len(number_selection)), arrows_small):
@@ -1098,12 +1098,12 @@ def execute_dualTask_beep_count_dots(window, results, base_filename, subj_path_r
         if responseList.index(arrowKey_number[0]) == correct_index:
             numbers_accuracy = 'correct'
             feedback.setText('Korrekt!')
-            feedback.setColor('green')
+            feedback.setColor('black')
             feedback.draw()
         else:
             numbers_accuracy = 'incorrect'
             feedback.setText('Inkorrekt!')
-            feedback.setColor('red')
+            feedback.setColor('black')
             feedback.draw()
         window.flip()
 
@@ -1338,8 +1338,49 @@ def display_text_and_wait(text_string, window):
     return display_and_wait(text_stim, window)
 
 
-def select_and_replace_number(task_name, replacement_number):
+def select_and_replace_number(given_number):
     """
+    Based on the given number, this function generates three random numbers that are within the
+    same tens or ones range. It then combines these numbers with the given number,
+    and randomly shuffles them to produce a list of four numbers.
+
+    Parameters:
+    given_number : int
+        The base number based on which three other numbers are generated.
+
+    Returns:
+    numbers : list of int
+        List of four numbers where one of the numbers is the given_number.
+    replace_index : int
+        The index at which the given_number is placed in the list.
+    """
+
+    # Check the range of the given_number
+    if given_number < 10:
+        range_start = 0
+        range_end = 9
+    else:
+        num_str = str(given_number)
+        range_start = int(num_str[:-1] + '0')
+        range_end = int(num_str[:-1] + '9')
+
+    # Create a list of all numbers in the range except the given_number
+    range_without_given = [i for i in range(range_start, range_end + 1) if i != given_number]
+
+    # Randomly select 3 numbers from this list
+    numbers = random.sample(range_without_given, 3)
+
+    # Add the given_number to the list and shuffle
+    numbers.append(given_number)
+    random.shuffle(numbers)
+
+    # Get the index of the given_number
+    replace_index = numbers.index(given_number)
+
+    return numbers, replace_index
+
+"""def select_and_replace_number(task_name, replacement_number):
+    
     Selects a set of unique numbers within a given range, and replaces one of these numbers
     with a specified replacement number. The range of numbers and the position of the replacement
     number are determined randomly.
@@ -1362,7 +1403,7 @@ def select_and_replace_number(task_name, replacement_number):
     This function is used to create a list of four numbers that includes a certain number
     (the replacement number). The other three numbers are selected randomly from a range
     that depends on the task_name. The replacement number's position in the list is also chosen randomly.
-    """
+    
 
     if task_name == 'practice_beep_count_dots' or task_name == 'test_beep_count_dots':
         range_start = 3
@@ -1383,4 +1424,4 @@ def select_and_replace_number(task_name, replacement_number):
     # Insert the replacement number at this index
     numbers.insert(replace_index, replacement_number)
 
-    return numbers, replace_index
+    return numbers, replace_index"""

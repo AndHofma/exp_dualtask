@@ -27,46 +27,46 @@ record_path = 'recordings/'
 
 
 # to use in acoustic lab - second monitor name fixed here
-#def create_window():
-#    """
-#    Create and initialize the experiment window.
-#
-#    Returns:
-#    win: A PsychoPy visual.Window object for the experiment.
-#    """
-#    # Create a monitor object for the second screen
-#    second_monitor = monitors.Monitor(name='EA273WMi')
-#    # Set the appropriate settings for the second monitor
-#    second_monitor.setSizePix((1920, 1080))  # Set the desired resolution of the second screen
-#
-#    # Create and return a window for the experiment on the second monitor
-#    return visual.Window(monitor=second_monitor,  # Use the second monitor
-#                         size=(1920, 1080),
-#                         screen=1,  # Specify the index of the second screen (0 for the first screen, 1 for the second, etc.)
-#                         allowGUI=True,
-#                         fullscr=True,
-#                         color=(255, 255, 255)
-#                         )
+def create_window():
+    """
+    Create and initialize the experiment window.
+
+    Returns:
+    win: A PsychoPy visual.Window object for the experiment.
+    """
+    # Create a monitor object for the second screen
+    second_monitor = monitors.Monitor(name='EA244WMi')
+    # Set the appropriate settings for the second monitor
+    second_monitor.setSizePix((1920, 1080))  # Set the desired resolution of the second screen
+
+    # Create and return a window for the experiment on the second monitor
+    return visual.Window(monitor=second_monitor,  # Use the second monitor
+                         size=(1920, 1080),
+                         screen=2,  # Specify the index of the second screen (0 for the first screen, 1 for the second, etc.)
+                         allowGUI=True,
+                         fullscr=True,
+                         color=(255, 255, 255)
+                         )
 
 
 # to use for testing on laptop
-def create_window():
-   """
-   Create and initialize the experiment window.
-   Returns:
-   win : A PsychoPy visual.Window object for the experiment.
-   """
+#def create_window():
+#   """
+#   Create and initialize the experiment window.
+#   Returns:
+#   win : A PsychoPy visual.Window object for the experiment.
+#   """
 
-   # Create a monitor object
-   currentMonitor = monitors.Monitor(name='testMonitor')
+#   # Create a monitor object
+#   currentMonitor = monitors.Monitor(name='testMonitor')
 
-   # Create and return a window for the experiment
-   return visual.Window(monitors.Monitor.getSizePix(currentMonitor),
-                        monitor="testMonitor",
-                        allowGUI=True,
-                        fullscr=True,
-                        color=(255, 255, 255)
-                        )
+#   # Create and return a window for the experiment
+#   return visual.Window(monitors.Monitor.getSizePix(currentMonitor),
+#                        monitor="testMonitor",
+#                        allowGUI=True,
+#                        fullscr=True,
+#                        color=(255, 255, 255)
+#                        )
 
 
 def initialize_stimuli(window):
@@ -99,7 +99,7 @@ def initialize_stimuli(window):
     # trigger question
     werKommt = visual.TextStim(window,
                                text="Wer kommt?",
-                               height=0.3,
+                               height=0.25,
                                pos=(0, 0),
                                color="black",
                                name='question')
@@ -135,9 +135,9 @@ def initialize_stimuli(window):
 
 
     # default parameters for the recordings
-    fs = 44100  # Sample rate
+    fs = 48000  # Sample rate
     # Calculate the recording duration in seconds
-    visual_frames = 300
+    visual_frames = 350
     # automatically estimate monitor's refresh rate from window object
     estimated_frame_rate = window.getActualFrameRate()
     # If for some reason the function fails to get the actual frame rate, it will return None.
