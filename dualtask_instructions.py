@@ -16,7 +16,7 @@ b) (Lotte und Laura) und Lisa
 Die Klammern geben an, welche der Personen gemeinsam kommen. 
 Gibt es keine Klammern wie in (a), kommen alle drei gemeinsam. 
 Gibt es Klammern wie in (b), kommen Lotte und Laura gemeinsam 
-und Nora kommt auch, aber nicht zusammen mit Lotte und Laura. 
+und Lisa kommt auch, aber nicht zusammen mit Lotte und Laura. 
 Ihre Aufgabe ist es, die Namen so zu sagen, dass man möglichst 
 gut verstehen kann, welche Personen gemeinsam kommen.  \n 
 Drücken Sie die Eingabetaste (Enter), um zur nächsten Seite zu kommen.
@@ -41,7 +41,6 @@ Nochmal zur Erinnerung:
 Erst erscheint die Frage: Wer kommt? 
 Dann sehen Sie ein Fixationskreuz. 
 Und dann folgt die Namenssequenz. 
-Lesen Sie die Namenssequenz kurz durch und dann laut vor.
 Wenn Sie sich versprechen, starten Sie bitte einfach noch einmal. 
 Achten Sie darauf, dass man so genau wie möglich versteht, 
 wer gemeinsam kommt. \n
@@ -110,7 +109,7 @@ Im zweiten Teil gibt es ein paar zusätzliche Aufgaben.
 Zu Beginn erscheint nun eine Zahl zwischen 100-999. 
 Merken Sie sich die Zahl gut.
 Danach kommt die Frage - Wer kommt? - und das Fixationskreuz.
-Bevor diesmal die Namenssequenz erscheint (und auch danach) hören Sie Töne.
+Bevor und nachdem diesmal die Namenssequenz erscheint hören Sie Töne.
 Alle Töne haben dieselbe Tonhöhe, aber hin und wieder hören Sie einen Ton, der höher ist, als die anderen.
 Bitte drücken Sie so schnell wie möglich auf die Leertaste, wenn Sie den hohen Ton hören.
 Wenn zwischendurch die Namenssequenz erscheint, lesen Sie die Namenssequenz so vor wie im ersten Teil.  \n 

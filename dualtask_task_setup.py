@@ -18,7 +18,7 @@ import datetime
 import sounddevice as sd
 from scipy.io.wavfile import write
 import random
-from configuration import append_result_to_csv
+from dualtask_configuration import append_result_to_csv
 import os
 import numpy as np
 
@@ -1245,7 +1245,7 @@ def execute_task(window, task_name, participant_info, stimuli, werKommt, fixatio
     # Initialize an empty list to hold the results
     results = []
     # Import the end-of-practice instructions
-    from instructions import instructPracticeSingleTaskEnd,  instructPracticeDualTask_number_dots_End, instructPracticeDualTask_number_beep_press_End, instructPracticeDualTask_beep_count_dots_End
+    from dualtask_instructions import instructPracticeSingleTaskEnd,  instructPracticeDualTask_number_dots_End, instructPracticeDualTask_number_beep_press_End, instructPracticeDualTask_beep_count_dots_End
 
     # path setup results per participant
     # Define the path in results for each subject
@@ -1357,8 +1357,8 @@ def select_and_replace_number(given_number):
 
     # Check the range of the given_number
     if given_number < 10:
-        range_start = 0
-        range_end = 9
+        range_start = given_number - 2
+        range_end = given_number + 2
     else:
         num_str = str(given_number)
         range_start = int(num_str[:-1] + '0')
@@ -1378,50 +1378,3 @@ def select_and_replace_number(given_number):
     replace_index = numbers.index(given_number)
 
     return numbers, replace_index
-
-"""def select_and_replace_number(task_name, replacement_number):
-    
-    Selects a set of unique numbers within a given range, and replaces one of these numbers
-    with a specified replacement number. The range of numbers and the position of the replacement
-    number are determined randomly.
-
-    Parameters:
-    task_name : str
-        The name of the task, which determines the range of numbers to be selected. If the task
-        is 'practice_beep_count_dots' or 'test_beep_count_dots', the range is from
-        3 to 23, otherwise the range is from 100 to 999.
-    replacement_number : int
-        The number that will replace one of the randomly selected numbers in the final list.
-
-    Returns:
-    numbers : list of int
-        List of four numbers where one of the numbers is the replacement_number.
-    replace_index : int
-        The index at which the replacement_number is placed in the list.
-
-    Notes:
-    This function is used to create a list of four numbers that includes a certain number
-    (the replacement number). The other three numbers are selected randomly from a range
-    that depends on the task_name. The replacement number's position in the list is also chosen randomly.
-    
-
-    if task_name == 'practice_beep_count_dots' or task_name == 'test_beep_count_dots':
-        range_start = 3
-        range_end = 23
-    else:
-        range_start = 100
-        range_end = 999
-
-    # Create a list of all numbers in the range except the replacement number
-    range_without_replacement = [i for i in range(range_start, range_end) if i != replacement_number]
-
-    # Randomly select 3 numbers from this list
-    numbers = random.sample(range_without_replacement, 3)
-
-    # Randomly choose an index to insert the replacement number
-    replace_index = random.randint(0, 3)
-
-    # Insert the replacement number at this index
-    numbers.insert(replace_index, replacement_number)
-
-    return numbers, replace_index"""

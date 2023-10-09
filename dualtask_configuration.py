@@ -13,17 +13,32 @@ from psychopy import monitors, visual, gui, core
 import csv
 import os
 import datetime
+import sys
+
+
+def resource_path(relative_path):
+    """Determine and return the absolute path to the resource."""
+
+    # Check if the application is frozen (compiled)
+    if getattr(sys, 'frozen', False):
+        # If we're running as a bundled exe, set the base path as one level above the executable
+        base_path = os.path.join(os.path.dirname(sys.executable), "..")
+    else:
+        # If we're running in a normal Python environment
+        base_path = os.path.dirname(os.path.abspath(__file__))
+
+    return os.path.join(base_path, relative_path)
 
 
 # Setup paths
 # stimulus directory
-stim_path = 'stimuli/'
+stim_path = resource_path('stimuli/')
 # output directory for experiment results
-output_path = 'results/'
+output_path = resource_path('results/')
 # directory for the pictograms used
-pics_path = 'pics/'
+pics_path = resource_path('pics/')
 # directory for all recordings
-record_path = 'recordings/'
+record_path = resource_path('recordings/')
 
 
 # to use in acoustic lab - second monitor name fixed here
@@ -217,7 +232,7 @@ def initialize_stimuli(window):
 
 def get_participant_info():
     """
-    Open a dialogue box to get participant information, including the current date and time, subject_ID, and experiment name.
+    Open a dialogue box to get participant information, including the current date and time, subjectID, and experiment name.
 
     The function creates a dialogue box with pre-defined experiment parameters such as experiment name and the current date.
     The user is then required to input their unique subject ID.
@@ -236,7 +251,7 @@ def get_participant_info():
     experiment_name = "Dual-Task"  # Production-Dual-Task
     experiment_config = {
         'experiment': 'dual_task_experiment',
-        'subject': 'subject_ID',
+        'subject': 'subjectID',
         'cur_date': datetime.datetime.now().strftime("%Y-%m-%d_%Hh%M")  # Use strftime to format the date string
     }
     # Create a dialogue box for the subject to enter their information
@@ -263,7 +278,7 @@ def append_result_to_csv(result, base_filename, participant_info, type='main'):
     Args:
         result (dict): A dictionary containing the data for a single trial.
         base_filename (str): The base name of the CSV file to which results are appended.
-        participant_info (dict): A dictionary containing the participant's information, including experiment name, subject ID, and date.
+        participant_info (dict): A dictionary containing the participant's information, including experiment name, subjectID, and date.
         type (str, optional): Determines the type of task for which results are being recorded. It can be 'main' for the main trial results,
         'beep_press' for beep press task results, and 'beep_count' for beep count task results. Defaults to 'main'.
 
@@ -288,7 +303,7 @@ def append_result_to_csv(result, base_filename, participant_info, type='main'):
             if type == 'main':
                 file.write(
                 'experiment,'
-                'subject_ID,'
+                'subjectID,'
                 'date,'
                 'task,'
                 'main_trial,'
@@ -327,7 +342,7 @@ def append_result_to_csv(result, base_filename, participant_info, type='main'):
             elif type == 'beep_press':
                 file.write(
                     'experiment,'
-                    'subject_id,'
+                    'subjectID,'
                     'date,'
                     'task,'
                     'phase,'
@@ -345,7 +360,7 @@ def append_result_to_csv(result, base_filename, participant_info, type='main'):
             elif type == 'beep_count':
                 file.write(
                     'experiment,'
-                    'subject_id,'
+                    'subjectID,'
                     'date,'
                     'task,'
                     'phase,'

@@ -14,11 +14,11 @@ Detailed inline comments have been added to help understand the flow and functio
 """
 
 # Import necessary PsychoPy libraries
-from load_stimuli_check_path import check_config_paths, load_and_randomize
-from configuration import get_participant_info, initialize_stimuli, create_window, stim_path, output_path, pics_path, record_path
-from task_setup import execute_task, display_and_wait, display_text_and_wait
+from dualtask_stimuli_load_path_check import check_config_paths, load_and_randomize
+from dualtask_configuration import get_participant_info, initialize_stimuli, create_window, stim_path, output_path, pics_path, record_path
+from dualtask_task_setup import execute_task, display_and_wait, display_text_and_wait
 from psychopy import core
-from instructions import *
+from dualtask_instructions import *
 
 # Checking validity of paths for stimuli and output
 check_config_paths(stim_path, output_path, pics_path, record_path)
@@ -28,25 +28,19 @@ stimuli_dual_number_dots = load_and_randomize(stim_path, 'dual_number_dots')
 stimuli_dual_number_beep_press = load_and_randomize(stim_path, 'dual_number_beep_press')
 stimuli_dual_beep_count_dots = load_and_randomize(stim_path, 'dual_beep_count_dots')
 
-# for debugging
-"""print(f'stimuli_single: {stimuli_single}')
-print(f'stimuli_single: {stimuli_dual_number_dots}')
-print(f'stimuli_single: {stimuli_dual_number_beep_press}')
-print(f'stimuli_single: {stimuli_dual_beep_count_dots}')"""
-
-
 # this is just for debugging and piloting
 """stimuli_single[0] = stimuli_single[0][:2]
+
 stimuli_single[1] = stimuli_single[1][:3]
 
 stimuli_dual_number_dots[0] = stimuli_dual_number_dots[0][:3]
-stimuli_dual_number_dots[1] = stimuli_dual_number_dots[1][:20]
+stimuli_dual_number_dots[1] = stimuli_dual_number_dots[1][:10]
 
 stimuli_dual_number_beep_press[0] = stimuli_dual_number_beep_press[0][:3]
-stimuli_dual_number_beep_press[1] = stimuli_dual_number_beep_press[1][:20]
+stimuli_dual_number_beep_press[1] = stimuli_dual_number_beep_press[1][:10]
 
 stimuli_dual_beep_count_dots[0] = stimuli_dual_beep_count_dots[0][:3]
-stimuli_dual_beep_count_dots[1] = stimuli_dual_beep_count_dots[1][:20]"""
+stimuli_dual_beep_count_dots[1] = stimuli_dual_beep_count_dots[1][:10]"""
 
 # Get participant information
 participant_info = get_participant_info()
@@ -104,7 +98,7 @@ execute_task(window=window,
              number_prompts=number_prompts,
              )
 
-# Displaying the instruction for the dual task
+"""# Displaying the instruction for the dual task
 display_text_and_wait(instructDualTask_number_dots_1, window)
 if display_text_and_wait(instructDualTask_number_dots_2, window):
     display_text_and_wait(instructPracticeDualTask_number_dots_Start, window)
@@ -153,7 +147,7 @@ execute_task(window=window,
              arrows_small=arrows_small,
              number_prompts=number_prompts,
              dual_task=True  # or True if you want to execute a dual task
-             )
+             )"""
 
 # Displaying the instruction for the dot motion, calculation and beep deviation dual task
 if display_text_and_wait(instructDualTask_number_beep_press_1, window):
