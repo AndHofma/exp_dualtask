@@ -41,7 +41,6 @@ Nochmal zur Erinnerung:
 Erst erscheint die Frage: Wer kommt? 
 Dann sehen Sie ein Fixationskreuz. 
 Und dann folgt die Namenssequenz. 
-Wenn Sie sich versprechen, starten Sie bitte einfach noch einmal. 
 Achten Sie darauf, dass man so genau wie möglich versteht, 
 wer gemeinsam kommt. \n
 Drücken Sie die Eingabetaste (Enter), um mit den Übungsbeispielen zu beginnen.
@@ -57,93 +56,6 @@ Danach können Sie eine Pause machen, wenn Sie das wünschen. \n
 Drücken Sie die Eingabetaste (Enter), um mit dem Experiment zu starten.
 """
 
-# instructions for end of single task and intro to dual task with dot motion and calculations
-instructDualTask_number_dots_1 = """
-Erster Teil - geschafft! \n
-Im zweiten Teil gibt es ein paar zusätzliche Aufgaben. 
-Zu Beginn erscheint nun eine Zahl zwischen 100-999. 
-Merken Sie sich die Zahl gut. 
-Danach kommt wieder die Frage, das Fixationskreuz und die Namenssequenz. 
-Lesen Sie die Namenssequenz so vor wie im ersten Teil.
-Gleichzeitig sehen Sie kurz Punkte, die sich bewegen.
-Die Mehrzahl der Punkte bewegt sich entweder nach oben, nach unten, nach links oder nach rechts. 
-Merken Sie sich bitte, in welche Richtung die Punkte sich bewegen. \n 
-Drücken Sie die Eingabetaste (Enter), um zur nächsten Seite zu gelangen.
-"""
-
-# instructions dual task with dot motion and calculations second screen
-instructDualTask_number_dots_2 = """
-Nachdem Sie sich alles gemerkt und die Namen vorgelesen haben, 
-sehen Sie vier Pfeile. 
-Klicken Sie auf die Pfeiltaste der Tastatur, die in die Richtung zeigt, 
-in die sich die Punkte bewegt haben. 
-Gleich im Anschluss sehen Sie vier Zahlen. 
-Klicken Sie auf die Pfeiltaste der Tastatur, die auf die Zahl zeigt, 
-die Sie sich merken sollten.  \n
-Drücken Sie die Eingabetaste (Enter), um zur nächsten Seite zu gelangen.
-"""
-
-# reminder instruction dual task with dot motion and calculations and intro practice trials
-instructPracticeDualTask_number_dots_Start = """
-Nochmal zur Erinnerung:
-Merken Sie sich die Zahl, die zu Beginn erscheint.
-Bitte lesen Sie die Namenssequenz wieder so vor, dass man so genau wie möglich versteht, wer gemeinsam kommt.
-Merken Sie sich die Richtung, in die die meisten Punkte sich bewegen.
-Klicken Sie auf die Pfeiltaste der Tastatur, die in die Richtung zeigt, in die sich die Punkte bewegt haben.
-Klicken Sie auf die Pfeiltaste der Tastatur, die zu der Zahl zeigt, die Sie sich gemerkt haben. \n
-Drücken Sie die Eingabetaste (Enter), um mit den Übungsbeispielen zu beginnen.
-"""
-
-# end practice trials dual task with dot motion and calculations - begin test dual task
-instructPracticeDualTask_number_dots_End = """
-Das waren die Übungsbeispiele. \n
-Falls Sie noch Fragen haben, geben Sie bitte der Versuchsleiterin Bescheid.
-Dieser Teil dauert ca. 8 Minuten - Sie sehen wieder 24 verschiedene Namenssequenzen. \n
-Drücken Sie die Eingabetaste (Enter), um mit dem Experiment zu starten.
-"""
-
-# instructions for end of single task and intro to dual task with dot motion, calculations and beep deviation
-instructDualTask_number_beep_press_1 = """
-Erster Teil - geschafft! \n
-Im zweiten Teil gibt es ein paar zusätzliche Aufgaben. 
-Zu Beginn erscheint nun eine Zahl zwischen 100-999. 
-Merken Sie sich die Zahl gut.
-Danach kommt die Frage - Wer kommt? - und das Fixationskreuz.
-Bevor und nachdem diesmal die Namenssequenz erscheint hören Sie Töne.
-Alle Töne haben dieselbe Tonhöhe, aber hin und wieder hören Sie einen Ton, der höher ist, als die anderen.
-Bitte drücken Sie so schnell wie möglich auf die Leertaste, wenn Sie den hohen Ton hören.
-Wenn zwischendurch die Namenssequenz erscheint, lesen Sie die Namenssequenz so vor wie im ersten Teil.  \n 
-Drücken Sie die Eingabetaste (Enter), um zur nächsten Seite zu gelangen.
-"""
-
-# instructions dual task with dot motion, calculations and beep deviation second screen
-instructDualTask_number_beep_press_2 = """
-Nachdem Sie auf die hohen Töne reagiert und die Namenssequenz vorgelesen haben, sehen Sie vier Zahlen.
-Klicken Sie auf die Pfeiltaste der Tastatur, die auf die Zahl zeigt, die Sie sich merken sollten. \n 
-Lesen Sie die Namenssequenz wieder so vor, dass man so genau wie möglich versteht, wer gemeinsam kommt.
-Und lösen Sie die zusätzlichen Aufgaben so akkurat wie möglich. \n
-Drücken Sie die Eingabetaste (Enter), um zur nächsten Seite zu gelangen.
-"""
-
-# reminder instruction dual task with dot motion, calculations and beep deviation and intro practice trials
-instructPracticeDualTask_number_beep_press_Start = """
-Nochmal zur Erinnerung:
-Merken Sie sich die Zahl, die zu Beginn erscheint.
-Nach der Frage und dem Fixationskreuz hören Sie Töne.
-Drücke Sie so schnell wie möglich die Leertaste, wenn Sie einen hohen Ton hören.
-Lesen Sie zwischendurch die Namenssequenz laut vor.
-Schließlich klicken Sie auf die Pfeiltaste der Tastatur, die zu der Zahl zeigt, die Sie sich gemerkt haben. \n
-Drücken Sie die Eingabetaste (Enter), um mit den Übungsbeispielen zu beginnen.
-"""
-
-# end practice trials dual task with dot motion and calculations - begin test dual task
-instructPracticeDualTask_number_beep_press_End = """
-Das waren die Übungsbeispiele. \n
-Falls Sie noch Fragen haben, geben Sie bitte der Versuchsleiterin Bescheid.
-Dieser Teil dauert ca. 10 Minuten - Sie sehen wieder 24 verschiedene Namenssequenzen. \n
-Drücken Sie die Eingabetaste (Enter), um mit dem Experiment zu starten.
-"""
-
 # instructions for end of single task and intro to dual task with dot motion, calculations and beep deviation
 instructDualTask_beep_count_dots_1 = """
 Erster Teil - geschafft! \n
@@ -152,6 +64,7 @@ Zu Beginn sehen Sie wieder die Frage - Wer kommt? - und das Fixationskreuz.
 Bevor diesmal die Namenssequenz erscheint (und auch danach) hören Sie Töne.
 Alle Töne haben dieselbe Tonhöhe, aber hin und wieder hören Sie einen Ton, der höher ist, als die anderen.
 Bitte zählen Sie still mit wieviele dieser hohen Töne abgespielt wurden und merken sich die Anzahl.
+Nutzen Sie bitte NICHT die Finger zum Mitzählen.
 Zwischendurch erscheint dann die Namenssequenz und gleichzeitig sehen Sie dann noch eine Punktwolke.
 Merken Sie sich die Richtung, in die die meisten Punkte sich bewegen. \n 
 Drücken Sie die Eingabetaste (Enter), um zur nächsten Seite zu gelangen.
@@ -182,6 +95,6 @@ Drücken Sie die Eingabetaste (Enter), um mit den Übungsbeispielen zu beginnen.
 instructPracticeDualTask_beep_count_dots_End = """
 Das waren die Übungsbeispiele. \n
 Falls Sie noch Fragen haben, geben Sie bitte der Versuchsleiterin Bescheid.
-Dieser Teil dauert ca. 10 Minuten - Sie sehen wieder 24 verschiedene Namenssequenzen. \n
+Dieser Teil dauert ca. 15 Minuten - Sie sehen wieder 24 verschiedene Namenssequenzen. \n
 Drücken Sie die Eingabetaste (Enter), um mit dem Experiment zu starten.
 """

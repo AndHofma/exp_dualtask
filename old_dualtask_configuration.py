@@ -64,6 +64,26 @@ def create_window():
                          )
 
 
+# to use for testing on laptop
+#def create_window():
+#   """
+#   Create and initialize the experiment window.
+#   Returns:
+#   win : A PsychoPy visual.Window object for the experiment.
+#   """
+
+#   # Create a monitor object
+#   currentMonitor = monitors.Monitor(name='testMonitor')
+
+#   # Create and return a window for the experiment
+#   return visual.Window(monitors.Monitor.getSizePix(currentMonitor),
+#                        monitor="testMonitor",
+#                        allowGUI=True,
+#                        fullscr=True,
+#                        color=(255, 255, 255)
+#                        )
+
+
 def initialize_stimuli(window):
     """
     Initialize all the stimuli that will be used throughout the experiment.
@@ -76,6 +96,7 @@ def initialize_stimuli(window):
 
             werKommt (psychopy.visual.TextStim): Text stimulus for triggering question.
             fixation (psychopy.visual.ShapeStim): Visual stimulus for fixation cross.
+            randNumber (psychopy.visual.TextStim): Text stimulus for displaying random number to be remembered.
             item (psychopy.visual.TextStim): Text stimulus for displaying item (stimulus or name coordinate) from list.
             prompt (psychopy.visual.TextStim): Text stimulus for displaying response prompt.
             feedback (psychopy.visual.TextStim): Text stimulus for displaying feedback.
@@ -104,7 +125,11 @@ def initialize_stimuli(window):
                                 closeShape=False,
                                 lineColor="black",
                                 name='fixation')
-
+    # random number to be remembered
+    randNumber = visual.TextStim(window,
+                                 pos=(0, 0),
+                                 color="black",
+                                 name='randNumber')
     # item (aka stimulus or name coordinate) from list
     item = visual.TextStim(window,
                            pos=(0, 0),
@@ -202,7 +227,7 @@ def initialize_stimuli(window):
         number_prompts.append(number_prompt)
 
 
-    return werKommt, fixation, item, prompt, feedback, fs, rec_seconds, movementDirections, responseList, dots, arrows, arrows_small, number_prompts
+    return werKommt, fixation, randNumber, item, prompt, feedback, fs, rec_seconds, movementDirections, responseList, dots, arrows, arrows_small, number_prompts
 
 
 def get_participant_info():
@@ -286,12 +311,23 @@ def append_result_to_csv(result, base_filename, participant_info, type='main'):
                 'stimulus_id,'
                 'stimulus,'
                 'stimulus_rec,'
+                'rand_nr,'
                 'dot_direction,'
                 'dot_1st_frame,'
                 'dot_last_frame,'
                 'dot_response_key,'
                 'dot_response_accuracy,'
+                'number_selection,'
+                'index_rand_nr,'
+                'index_number_response,'
+                'number_response_accuracy,'
                 'beep_sequence,'
+                'beep_press_trials,'
+                'beep_press_deviant_trials,'
+                'beep_press_normal_trials,'
+                'beep_press_rt_correct,'
+                'beep_press_rt_incorrect,'
+                'beep_press_accuracy,'
                 'beep_count_trials,'
                 'beep_count_deviant_trials,'
                 'beep_count_normal_trials,'
@@ -302,6 +338,24 @@ def append_result_to_csv(result, base_filename, participant_info, type='main'):
                 'start_time,'
                 'end_time,'
                 'duration \n'
+                )
+            elif type == 'beep_press':
+                file.write(
+                    'experiment,'
+                    'subjectID,'
+                    'date,'
+                    'task,'
+                    'phase,'
+                    'main_trial,'
+                    'beep_press_trial,'
+                    'beep_press_stimulus,'
+                    'beep_press_rt,'
+                    'beep_press_response_type,'
+                    'beep_press_accuracy,'
+                    'presentation,'
+                    'start_time,'
+                    'end_time,'
+                    'duration \n'
                 )
             elif type == 'beep_count':
                 file.write(
@@ -332,12 +386,23 @@ def append_result_to_csv(result, base_filename, participant_info, type='main'):
                 result['stimulus_id'],
                 result['stimulus'],
                 result['stimulus_rec'],
+                result['rand_nr'],
                 result['dot_direction'],
                 result['dot_1st_frame'],
                 result['dot_last_frame'],
                 result['dot_response_key'],
                 result['dot_response_accuracy'],
+                result['number_selection'],
+                result['index_rand_nr'],
+                result['index_number_response'],
+                result['number_response_accuracy'],
                 result['beep_sequence'],
+                result['beep_press_trials'],
+                result['beep_press_deviant_trials'],
+                result['beep_press_normal_trials'],
+                result['beep_press_rt_correct'],
+                result['beep_press_rt_incorrect'],
+                result['beep_press_accuracy'],
                 result['beep_count_trials'],
                 result['beep_count_deviant_trials'],
                 result['beep_count_normal_trials'],
@@ -345,6 +410,24 @@ def append_result_to_csv(result, base_filename, participant_info, type='main'):
                 result['beep_count_index_correct_count'],
                 result['beep_count_response'],
                 result['beep_count_response_accuracy'],
+                result['start_time'],
+                result['end_time'],
+                result['duration']
+            ])
+        elif type == 'beep_press':
+            writer.writerow([
+                participant_info['experiment'],
+                participant_info['subject'],
+                participant_info['cur_date'],
+                result['task'],
+                result['phase'],
+                result['main_trial'],
+                result['beep_press_trial'],
+                result['beep_press_stimulus'],
+                result['beep_press_rt'],
+                result['beep_press_response_type'],
+                result['beep_press_accuracy'],
+                result['presentation'],
                 result['start_time'],
                 result['end_time'],
                 result['duration']

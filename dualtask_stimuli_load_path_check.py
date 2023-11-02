@@ -91,10 +91,6 @@ def load_and_randomize(stim_path, task):
         # Randomize the order of coordinates
         if task == "single":
             rand_coordinates = coordinates.sample(frac=1).reset_index(drop=True)
-        elif task == "dual_number_dots":
-            rand_coordinates = coordinates.sample(frac=1).reset_index(drop=True)
-        elif task == "dual_number_beep_press":
-            rand_coordinates = coordinates.sample(frac=1).reset_index(drop=True)
         else:
             rand_coordinates = coordinates.sample(frac=1).reset_index(drop=True)
 

@@ -24,14 +24,29 @@ from dualtask_instructions import *
 check_config_paths(stim_path, output_path, pics_path, record_path)
 # Loading and randomizing the stimulus types
 stimuli_single = load_and_randomize(stim_path, 'single')
+stimuli_dual_number_dots = load_and_randomize(stim_path, 'dual_number_dots')
+stimuli_dual_number_beep_press = load_and_randomize(stim_path, 'dual_number_beep_press')
 stimuli_dual_beep_count_dots = load_and_randomize(stim_path, 'dual_beep_count_dots')
+
+# this is just for debugging and piloting
+stimuli_single[0] = stimuli_single[0][:2]
+stimuli_single[1] = stimuli_single[1][:5]
+
+stimuli_dual_number_dots[0] = stimuli_dual_number_dots[0][:2]
+stimuli_dual_number_dots[1] = stimuli_dual_number_dots[1][:8]
+
+stimuli_dual_number_beep_press[0] = stimuli_dual_number_beep_press[0][:2]
+stimuli_dual_number_beep_press[1] = stimuli_dual_number_beep_press[1][:8]
+
+stimuli_dual_beep_count_dots[0] = stimuli_dual_beep_count_dots[0][:2]
+stimuli_dual_beep_count_dots[1] = stimuli_dual_beep_count_dots[1][:8]
 
 # Get participant information
 participant_info = get_participant_info()
 # Creating the display window
 window = create_window()
 # Initializing all stimuli
-werKommt, fixation, item, prompt, feedback, fs, rec_seconds, movementDirections, responseList, dots, arrows, arrows_small, number_prompts = initialize_stimuli(window)
+werKommt, fixation, randNumber, item, prompt, feedback, fs, rec_seconds, movementDirections, responseList, dots, arrows, arrows_small, number_prompts = initialize_stimuli(window)
 
 # Starting the experiment by displaying the instruction for the single task
 display_text_and_wait(instructSingleTask1, window)
@@ -46,6 +61,7 @@ execute_task(window=window,
              stimuli=stimuli_single[0],
              werKommt=werKommt,
              fixation=fixation,
+             randNumber=randNumber,
              item=item,
              prompt=prompt,
              feedback=feedback,
@@ -67,6 +83,7 @@ execute_task(window=window,
              stimuli=stimuli_single[1],
              werKommt=werKommt,
              fixation=fixation,
+             randNumber=randNumber,
              item=item,
              prompt=prompt,
              feedback=feedback,
@@ -78,6 +95,107 @@ execute_task(window=window,
              arrows=arrows,
              arrows_small = arrows_small,
              number_prompts=number_prompts,
+             )
+
+# Displaying the instruction for the dual task
+display_text_and_wait(instructDualTask_number_dots_1, window)
+if display_text_and_wait(instructDualTask_number_dots_2, window):
+    display_text_and_wait(instructPracticeDualTask_number_dots_Start, window)
+
+# Running the dual task - number and dots - practice session
+# practice items = stimuli_dual_number_dots[0]
+execute_task(window=window,
+             task_name='practice_number_dots',
+             participant_info=participant_info,
+             stimuli=stimuli_dual_number_dots[0],
+             werKommt=werKommt,
+             fixation=fixation,
+             randNumber=randNumber,
+             item=item,
+             prompt=prompt,
+             feedback=feedback,
+             fs=fs,
+             rec_seconds=rec_seconds,
+             movementDirections=movementDirections,
+             responseList=responseList,
+             dots=dots,
+             arrows=arrows,
+             arrows_small=arrows_small,
+             number_prompts=number_prompts,
+             dual_task=True
+             )
+
+# Running the dual task - number and dots - test session
+# randomized coordinates = stimuli_dual_number_dots[1]
+execute_task(window=window,
+             task_name='test_number_dots',
+             participant_info=participant_info,
+             stimuli=stimuli_dual_number_dots[1],
+             werKommt=werKommt,
+             fixation=fixation,
+             randNumber=randNumber,
+             item=item,
+             prompt=prompt,
+             feedback=feedback,
+             fs=fs,
+             rec_seconds=rec_seconds,
+             movementDirections=movementDirections,
+             responseList=responseList,
+             dots=dots,
+             arrows=arrows,
+             arrows_small=arrows_small,
+             number_prompts=number_prompts,
+             dual_task=True  # or True if you want to execute a dual task
+             )
+
+# Displaying the instruction for the dot motion, calculation and beep deviation dual task
+if display_text_and_wait(instructDualTask_number_beep_press_1, window):
+    display_text_and_wait(instructDualTask_number_beep_press_2, window)
+
+# Running the dual task - number and beep press - practice session
+# practice items = stimuli_dual_number_beep_press[0]
+execute_task(window=window,
+             task_name='practice_number_beep_press',
+             participant_info=participant_info,
+             stimuli=stimuli_dual_number_beep_press[0],
+             werKommt=werKommt,
+             fixation=fixation,
+             randNumber=randNumber,
+             item=item,
+             prompt=prompt,
+             feedback=feedback,
+             fs=fs,
+             rec_seconds=rec_seconds,
+             movementDirections=movementDirections,
+             responseList=responseList,
+             dots=dots,
+             arrows=arrows,
+             arrows_small = arrows_small,
+             number_prompts=number_prompts,
+             dual_task=True
+             )
+
+# Running the dual task - number and beep press - test session
+# randomized coordinates = stimuli_dual_number_beep_press[1]
+execute_task(window=window,
+             task_name='test_number_beep_press',
+             participant_info=participant_info,
+             stimuli=stimuli_dual_number_beep_press[1],
+             werKommt=werKommt,
+             fixation=fixation,
+             randNumber=randNumber,
+             item=item,
+             prompt=prompt,
+             feedback=feedback,
+             fs=fs,
+             rec_seconds=rec_seconds,
+             movementDirections=movementDirections,
+             responseList=responseList,
+             dots=dots,
+             arrows=arrows,
+             arrows_small = arrows_small,
+             number_prompts=number_prompts,
+             dual_task=True  # or True if you want to execute a dual task
              )
 
 # Displaying the instruction for the dot motion, calculation and beep deviation dual task
@@ -92,6 +210,7 @@ execute_task(window=window,
              stimuli=stimuli_dual_beep_count_dots[0],
              werKommt=werKommt,
              fixation=fixation,
+             randNumber=randNumber,
              item=item,
              prompt=prompt,
              feedback=feedback,
@@ -114,6 +233,7 @@ execute_task(window=window,
              stimuli=stimuli_dual_beep_count_dots[1],
              werKommt=werKommt,
              fixation=fixation,
+             randNumber=randNumber,
              item=item,
              prompt=prompt,
              feedback=feedback,
